@@ -8,11 +8,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="Created models and account Controller">
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/CarNumber.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/CarNumber.cs" afterDir="false" />
+    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="Created attributes for forms fields">
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/ApplicationUser.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterDbInitializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/CarNumber.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Shared/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +102,7 @@
       <option name="presentableId" value="Default" />
       <updated>1727012470600</updated>
       <workItem from="1727012471673" duration="31000" />
-      <workItem from="1728501243079" duration="3739000" />
+      <workItem from="1728501243079" duration="8863000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -105,7 +112,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728504231230</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Created attributes for forms fields">
+      <option name="closed" value="true" />
+      <created>1728505573250</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728505573250</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +132,7 @@
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Created models and account Controller" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created models and account Controller" />
+    <MESSAGE value="Created attributes for forms fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created attributes for forms fields" />
   </component>
 </project>

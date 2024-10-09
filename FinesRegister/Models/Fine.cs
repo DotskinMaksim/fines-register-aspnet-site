@@ -7,16 +7,12 @@ namespace FinesRegister.Models;
 public class Fine
 {
     public int Id { get; set; }
-    
-    [DataType(DataType.Date)] 
     public DateTime IssueDate { get; set; }
-    
-    [DataType(DataType.Date)] 
     public DateTime DueDate { get; set; }
     public float Amount { get; set; }
     public string Reason { get; set; }
     public bool IsPaid { get; set; } = false;
-    public int CarNumberId { get; set; }
+    public int CarId { get; set; }
     
     
     public Fine()
