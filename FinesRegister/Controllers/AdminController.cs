@@ -1,16 +1,22 @@
 using FinesRegister.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace FinesRegister.Controllers;
 
 public class AdminController : Controller
 {
     private readonly FinesRegisterContext _dbContext;
+    private readonly UserManager<User> _userManager;
 
-    public AdminController(FinesRegisterContext dbContext)
+
+    public AdminController(FinesRegisterContext dbContext, UserManager<User> userManager)
     {
         _dbContext = dbContext;
+        _userManager = userManager;
+
     }
     
     public async Task<IActionResult> Fines() //FINES
@@ -20,8 +26,18 @@ public class AdminController : Controller
     }
     public async Task<IActionResult> Cars() //CARS
     {
-        var cars = await _dbContext.Cars.ToListAsync();
-        return View(cars);
+        var currentUser = await _userManager.GetUserAsync(User); // Получаем текущего пользователя
+        // ViewBag.IsAdmin = currentUser != null && currentUser.IsAdmin;
+        if (currentUser.IsAdmin)
+        {
+            var cars = await _dbContext.Cars.ToListAsync(); // Получаем список машин
+            return View(cars);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Account");
+        }
+        
     }
     
     

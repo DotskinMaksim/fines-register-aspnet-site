@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization; // Для использования �
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // Необходимо для использования EF Core
-using System.Linq; // Необходимо для использования LINQ
-using System.Threading.Tasks;
+
 
 namespace FinesRegister.Controllers
 {
@@ -49,10 +48,7 @@ namespace FinesRegister.Controllers
             ViewBag.ReturnUrl = returnUrl; // Сохраняем returnUrl в ViewBag для использования в представлении
             return View();
         }
-
-
-
-        //
+        
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -61,10 +57,10 @@ namespace FinesRegister.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Попробуйте найти пользователя по email
+        // Попробуйте найти пользователя по email
                 var user = await _userManager.FindByEmailAsync(model.Email);
-        
-                if (user == null)
+
+                    if (user == null)
                 {
                     _logger.LogWarning("No user found with email: {Email}", model.Email);
                     ModelState.AddModelError(string.Empty, "Неправильный адрес электронной почты или пароль.");
@@ -102,6 +98,7 @@ namespace FinesRegister.Controllers
 
             return View(model);
         }
+
 
 
         // GET: /Account/Register

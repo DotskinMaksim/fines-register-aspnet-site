@@ -2,39 +2,49 @@
 
 @{
 ViewBag.Title = "Cars";
+
 }
 
 <h2>Cars</h2>
 
-<p>
-    @Html.ActionLink("Create New", "CarCreate") 
-</p>
+
+    <p>
+        @Html.ActionLink("Create New", "CarCreate")
+    </p>
+
+
 <table class="table">
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.First().Number) 
+            @if (Model != null && Model.Any())
+            {
+            @Html.DisplayNameFor(model => model.First().Number)
+            }
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().UserId) 
+            @if (Model != null && Model.Any())
+            {
+            @Html.DisplayNameFor(model => model.First().UserId)
+            }
         </th>
-        <th></th> 
+        <th></th>
     </tr>
     </thead>
     <tbody>
-    @if (Model != null && Model.Any()) 
+    @if (Model != null && Model.Any())
     {
     foreach (var item in Model)
     {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Number) 
+            @Html.DisplayFor(modelItem => item.Number)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserId) 
+            @Html.DisplayFor(modelItem => item.UserId)
         </td>
         <td>
-            @Html.ActionLink("Edit", "CarEdit", new { id = item.Id }) | 
+            @Html.ActionLink("Edit", "CarEdit", new { id = item.Id }) |
             @Html.ActionLink("Delete", "CarDelete", new { id = item.Id })
         </td>
     </tr>
@@ -43,8 +53,9 @@ ViewBag.Title = "Cars";
     else
     {
     <tr>
-        <td colspan="3">No cars available.</td> 
+        <td colspan="3">No cars available.</td>
     </tr>
     }
     </tbody>
 </table>
+
