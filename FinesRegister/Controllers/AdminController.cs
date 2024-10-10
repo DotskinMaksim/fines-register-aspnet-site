@@ -1,4 +1,6 @@
+using System.Runtime.InteropServices.JavaScript;
 using FinesRegister.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FinesRegister.Controllers;
 
+
+[Authorize]
+[AdminOnly]
 public class AdminController : Controller
 {
     private readonly FinesRegisterContext _dbContext;
@@ -19,27 +24,26 @@ public class AdminController : Controller
 
     }
     
+    
+    
     public async Task<IActionResult> Fines() //FINES
     {
         var fines = await _dbContext.Fines.ToListAsync();
         return View(fines);
     }
+    
     public async Task<IActionResult> Cars() //CARS
     {
         var currentUser = await _userManager.GetUserAsync(User); // Получаем текущего пользователя
         // ViewBag.IsAdmin = currentUser != null && currentUser.IsAdmin;
-        if (currentUser.IsAdmin)
-        {
-            var cars = await _dbContext.Cars.ToListAsync(); // Получаем список машин
-            return View(cars);
-        }
-        else
-        {
-            return RedirectToAction("Login", "Account");
-        }
+
+            
+        var cars = await _dbContext.Cars.ToListAsync(); // Получаем список машин
+        return View(cars);
+        
+           
         
     }
-    
     
     // GET: /Admin/CarEdit/5
     public async Task<IActionResult> CarEdit(int id) //CAR EDIT
@@ -59,7 +63,7 @@ public class AdminController : Controller
 
         return View(editModel);
     }
-
+    
 // POST: /Admin/CarEdit
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -118,6 +122,7 @@ public class AdminController : Controller
         }
         return RedirectToAction("Cars", "Admin");
     }
+    
     // GET: /Admin/CarCreate
     public IActionResult CarCreate() //CAR CREATE
     {
@@ -150,7 +155,6 @@ public class AdminController : Controller
     }
     
     
-    
     // GET: /Admin/FineEdit/5
     public async Task<IActionResult> FineEdit(int id) //FINE EDIT
     {
@@ -176,6 +180,7 @@ public class AdminController : Controller
 // POST: /Admin/FineEdit
     [HttpPost]
     [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> FineEdit(FineEditViewModel model) //FINE EDIT
     {
         if (ModelState.IsValid)
@@ -202,6 +207,7 @@ public class AdminController : Controller
     }
 
 // GET: /Admin/FineDelete/5
+    
     public async Task<IActionResult> FineDelete(int id) //FINE DELETE
     {
         var fine = await _dbContext.Fines.FindAsync(id);
@@ -236,10 +242,12 @@ public class AdminController : Controller
         return RedirectToAction("Fines", "Admin");
     }
     
+    
     public IActionResult FineCreate() //FINE CREATE
     {
         return View();
     }
+    
     
     // POST: /Admin/FineCreate
     [HttpPost]

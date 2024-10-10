@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore; // Необходимо для исполь
 
 namespace FinesRegister.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager; // Для управления пользователями
@@ -27,12 +28,16 @@ namespace FinesRegister.Controllers
 
 
         }
-
-        // GET
-        public IActionResult Index()
+        public IActionResult AccessDenied()
         {
             return View();
         }
+
+        // // GET
+        // public IActionResult Index()
+        // {
+        //     return View();
+        // }
         
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -42,7 +47,6 @@ namespace FinesRegister.Controllers
         }
 
         
-        [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl; // Сохраняем returnUrl в ViewBag для использования в представлении
@@ -51,7 +55,6 @@ namespace FinesRegister.Controllers
         
         // POST: /Account/Login
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -102,88 +105,79 @@ namespace FinesRegister.Controllers
 
 
         // GET: /Account/Register
-        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-[AllowAnonymous]
-[ValidateAntiForgeryToken]
-public async Task<ActionResult> Register(RegisterViewModel model)
-{
-    if (ModelState.IsValid)
-    {
-        // Проверка наличия владельца с таким же email
-        var existingEmail = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email == model.Email); // Проверка существующего email
-        if (existingEmail != null)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            // Добавляем ошибку модели, если такой владелец уже существует
-            ModelState.AddModelError("", "Владелец с данным эмейлом уже зарегистрирован.");
-            return View(model); // Возвращаем пользователя на страницу регистрации
-        }
-
-        // Создаем нового пользователя
-        var user = new User()
-        {
-            Email = model.Email,
-            UserName = model.FirstName,
-            LastName = model.LastName,
-            PhoneNumber = model.PhoneNumber,
-            TwoFactorEnabled = false,
-            LockoutEnabled = true,
-            PasswordHash = model.Password
-        };
-
-        var result = await _userManager.CreateAsync(user, model.Password);
-        if (result.Succeeded)
-        {
-            await _signInManager.SignInAsync(user, isPersistent: true);
-
-            // Проверка наличия автомобиля с данным номером, у которого нет владельца
-            var car = await _dbContext.Cars
-                .FirstOrDefaultAsync(c => c.Number == model.CarNumber && c.UserId=="not defined");
-
-            if (car != null)
+            if (ModelState.IsValid)
             {
-                // Присваиваем новому пользователю автомобиль
-                car.UserId = user.Id;
-                await _dbContext.SaveChangesAsync(); // Сохраняем изменения
+                // Проверка наличия владельца с таким же email
+                var existingEmail = await _dbContext.Users
+                    .FirstOrDefaultAsync(u => u.Email == model.Email); // Проверка существующего email
+                if (existingEmail != null)
+                {
+                    // Добавляем ошибку модели, если такой владелец уже существует
+                    ModelState.AddModelError("", "Владелец с данным эмейлом уже зарегистрирован.");
+                    return View(model); // Возвращаем пользователя на страницу регистрации
+                }
+
+                // Создаем нового пользователя
+                var user = new User()
+                {
+                    Email = model.Email,
+                    UserName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
+                    TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    PasswordHash = model.Password
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: true);
+
+                    // Проверка наличия автомобиля с данным номером, у которого нет владельца
+                    var car = await _dbContext.Cars
+                        .FirstOrDefaultAsync(c => c.Number == model.CarNumber && c.UserId=="not defined");
+
+                    if (car != null)
+                    {
+                        // Присваиваем новому пользователю автомобиль
+                        car.UserId = user.Id;
+                        await _dbContext.SaveChangesAsync(); // Сохраняем изменения
+                    }
+                    else
+                    {
+                        // Если автомобиля с таким номером нет или у него уже есть владелец
+                        ModelState.AddModelError("", "Автомобиль с данным номером не найден или уже зарегистрирован.");
+                        return View(model);
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                AddErrors(result); // Обработка ошибок
             }
-            else
+
+            // Если произошла ошибка, снова отображаем форму регистрации
+            return View(model);
+        }
+
+
+        private void AddErrors(IdentityResult result)
+        { 
+            foreach (var error in result.Errors)
             {
-                // Если автомобиля с таким номером нет или у него уже есть владелец
-                ModelState.AddModelError("", "Автомобиль с данным номером не найден или уже зарегистрирован.");
-                return View(model);
+                ModelState.AddModelError(string.Empty, error.Description);
             }
-
-            return RedirectToAction("Index", "Home");
         }
-
-        AddErrors(result); // Обработка ошибок
+        
     }
-
-    // Если произошла ошибка, снова отображаем форму регистрации
-    return View(model);
-}
-
-
-    private void AddErrors(IdentityResult result)
-    { 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-    }
-
-    private IActionResult RedirectToLocal(string returnUrl)
-    {
-        if (Url.IsLocalUrl(returnUrl))
-        {
-            return Redirect(returnUrl);
-        }
-        return RedirectToAction("Index", "Home");
-    } }
 }

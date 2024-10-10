@@ -8,11 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="Added admin panel for editing fines and cars tables">
+    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +104,8 @@
       <workItem from="1728501243079" duration="8994000" />
       <workItem from="1728537701698" duration="14127000" />
       <workItem from="1728557361742" duration="9662000" />
-      <workItem from="1728576863707" duration="4420000" />
+      <workItem from="1728576863707" duration="4424000" />
+      <workItem from="1728584854596" duration="1025000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -145,7 +147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728579013759</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="WIP">
+      <option name="closed" value="true" />
+      <created>1728581563462</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728581563462</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,9 +168,9 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Created models and account Controller" />
     <MESSAGE value="Created attributes for forms fields" />
-    <MESSAGE value="WIP" />
     <MESSAGE value="Added individual authentication and db" />
     <MESSAGE value="Added admin panel for editing fines and cars tables" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added admin panel for editing fines and cars tables" />
+    <MESSAGE value="WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
   </component>
 </project>
