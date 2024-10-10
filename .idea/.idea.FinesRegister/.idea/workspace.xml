@@ -8,18 +8,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="Created attributes for forms fields">
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/ApplicationUser.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterDbInitializer.cs" afterDir="false" />
+    <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/CarNumber.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/ApplicationUser.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/FinesRegisterDbInitializer.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/User.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Shared/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,29 +40,29 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2nDIV6qfAMkmZX2HednVJbEiJ7x" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.FinesRegister: http.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.notifications",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.FinesRegister: http.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.FinesRegister: http">
     <configuration name="FinesRegister: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" />
@@ -69,6 +71,7 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
       <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
       <option name="SEND_DEBUG_REQUEST" value="1" />
@@ -92,6 +95,10 @@
         <option name="Build" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue=".NET Launch Settings Profile.FinesRegister: http" />
+      <item itemvalue=".NET Launch Settings Profile.FinesRegister: https" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -102,7 +109,8 @@
       <option name="presentableId" value="Default" />
       <updated>1727012470600</updated>
       <workItem from="1727012471673" duration="31000" />
-      <workItem from="1728501243079" duration="8863000" />
+      <workItem from="1728501243079" duration="8994000" />
+      <workItem from="1728537701698" duration="14127000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -120,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728505573250</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="WIP">
+      <option name="closed" value="true" />
+      <created>1728510577528</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1728510577528</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +149,7 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Created models and account Controller" />
     <MESSAGE value="Created attributes for forms fields" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created attributes for forms fields" />
+    <MESSAGE value="WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
   </component>
 </project>

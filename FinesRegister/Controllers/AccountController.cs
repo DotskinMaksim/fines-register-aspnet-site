@@ -5,19 +5,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // Необходимо для использования EF Core
 using System.Linq; // Необходимо для использования LINQ
 using System.Threading.Tasks;
-using FinesRegister.Models.Models;
 
 namespace FinesRegister.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager; // Для управления пользователями
-        private readonly SignInManager<IdentityUser> _signInManager; // Для аутентификации
+        private readonly UserManager<User> _userManager; // Для управления пользователями
+        private readonly SignInManager<User> _signInManager; // Для аутентификации
+        private readonly FinesRegisterContext _dbContext;
+        // private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly ILogger<AccountController> _logger; // Добавляем логгер
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+
+
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, FinesRegisterContext dbContext, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dbContext = dbContext;
+            // _passwordHasher = passwordHasher;
+            _logger = logger; // Инициализируем логгер
+
+
         }
 
         // GET
@@ -25,50 +34,105 @@ namespace FinesRegister.Controllers
         {
             return View();
         }
-
-        public IActionResult Login()
+        
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl; // Сохраняем returnUrl в ViewBag для использования в представлении
             return View();
         }
 
+
+
+        //
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(AccountViewModels.LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Попробуйте найти пользователя по email
+                var user = await _userManager.FindByEmailAsync(model.Email);
+        
+                if (user == null)
+                {
+                    _logger.LogWarning("No user found with email: {Email}", model.Email);
+                    ModelState.AddModelError(string.Empty, "Неправильный адрес электронной почты или пароль.");
+                    return View(model);
+                }
+
+                // Проверка блокировки пользователя
+                if (await _userManager.IsLockedOutAsync(user))
+                {
+                    _logger.LogWarning("User {Email} is locked out.", model.Email);
+                    ModelState.AddModelError(string.Empty, "Пользователь заблокирован.");
+                    return View(model);
+                }
+
+                // Проверка входа
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User {Email} logged in successfully.", model.Email);
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (result.IsLockedOut)
+                {
+                    _logger.LogWarning("User {Email} is locked out after too many failed login attempts.", model.Email);
+                    ModelState.AddModelError(string.Empty, "Пользователь заблокирован после слишком большого количества неудачных попыток входа.");
+                    return View(model);
+                }
+                else
+                {
+                    _logger.LogWarning("Invalid password for user: {Email}", model.Email);
+                    ModelState.AddModelError(string.Empty, "Неправильный адрес электронной почты или пароль.");
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
+
+        // GET: /Account/Register
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous] // Убедитесь, что это пространство имен импортировано
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(AccountViewModels.RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                using (var db = new FinesRegisterContext())
+                // Проверка наличия владельца автомобиля с данным номером
+                var existingCarNumber = await _dbContext.Cars
+                    .FirstOrDefaultAsync(c => c.Number == model.CarNumber && c.UserId != null);
+
+                if (existingCarNumber != null)
                 {
-                    // Проверка наличия владельца автомобиля с данным номером
-                    var existingCarNumber = db.Cars
-                        .FirstOrDefault(c => c.Number == model.CarNumber && c.UserId != 0); // Убедитесь, что UserId не равен 0
+                    // Добавляем ошибку модели, если такой владелец уже существует
+                    ModelState.AddModelError("", "Владелец с данным номером автомобиля уже зарегистрирован.");
+                    return View(model); // Возвращаем пользователя на страницу регистрации
+                }
 
-                    if (existingCarNumber != null)
-                    {
-                        // Добавляем ошибку модели, если такой владелец уже существует
-                        ModelState.AddModelError("", "Владелец с данным номером автомобиля уже зарегистрирован.");
-                        return View(model); // Возвращаем пользователя на страницу регистрации
-                    }
-
-                    // Проверка наличия владельца с таким же email
-                    var existingEmail = db.Users
-                        .FirstOrDefault(u => u.Email == model.Email); // Проверка существующего email
-                    if (existingEmail != null)
-                    {
-                        // Добавляем ошибку модели, если такой владелец уже существует
-                        ModelState.AddModelError("", "Владелец с данным эмейлом уже зарегистрирован.");
-                        return View(model); // Возвращаем пользователя на страницу регистрации
-                    }
+                // Проверка наличия владельца с таким же email
+                var existingEmail = await _dbContext.Users
+                    .FirstOrDefaultAsync(u => u.Email == model.Email); // Проверка существующего email
+                if (existingEmail != null)
+                {
+                    // Добавляем ошибку модели, если такой владелец уже существует
+                    ModelState.AddModelError("", "Владелец с данным эмейлом уже зарегистрирован.");
+                    return View(model); // Возвращаем пользователя на страницу регистрации
                 }
 
                 // Создаем нового пользователя
-                var user = new ApplicationUser()
+                var user = new User()
                 {
                     Email = model.Email,
                     UserName = model.FirstName, 
@@ -76,26 +140,21 @@ namespace FinesRegister.Controllers
                     PhoneNumber = model.PhoneNumber,
                     TwoFactorEnabled = false,
                     LockoutEnabled = true,
+                    PasswordHash = model.Password
                 };
-                
-                var passwordHasher = new PasswordHasher<ApplicationUser>();
-                user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
-                
-                
+                // user.SetPassword(model.Password, _passwordHasher);
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: true);
 
                     // Сохраняем владельца автомобиля в базе данных
-                    using (var db = new FinesRegisterContext())
+                    var car = await _dbContext.Cars.FirstOrDefaultAsync(c => c.Number == model.CarNumber); // Ищем автомобиль
+                    if (car != null)
                     {
-                        var car = await db.Cars.FirstOrDefaultAsync(c => c.Number == model.CarNumber); // Ищем автомобиль
-                        if (car != null)
-                        {
-                            car.UserId = user.Id; // Устанавливаем ID пользователя
-                            await db.SaveChangesAsync(); // Сохраняем изменения асинхронно
-                        }
+                        car.UserId = user.Id; // Устанавливаем ID пользователя
+                        await _dbContext.SaveChangesAsync(); // Сохраняем изменения асинхронно
                     }
 
                     return RedirectToAction("Index", "Home");
@@ -114,6 +173,15 @@ namespace FinesRegister.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
