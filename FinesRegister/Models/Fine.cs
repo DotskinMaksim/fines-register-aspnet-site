@@ -14,9 +14,4 @@ public class Fine
     public bool IsPaid { get; set; } = false;
     public int CarId { get; set; }
     
-    
-    public Fine()
-    {
-        DueDate = IssueDate.AddDays(15);
-    }
 }

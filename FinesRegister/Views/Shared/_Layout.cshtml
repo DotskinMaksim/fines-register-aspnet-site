@@ -37,8 +37,9 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Loout">Log out</a></li>
-
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                            <button type="submit" class="btn btn-link">Log out</button>
+                        </form>
                     </li>
                 }
                 else

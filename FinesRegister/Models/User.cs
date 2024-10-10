@@ -11,7 +11,6 @@ namespace FinesRegister.Models;
 
 public class User : IdentityUser
 {
-    public int Id { get; set; }
     public string LastName { get; set; }
     public bool IsAdmin { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.Now;

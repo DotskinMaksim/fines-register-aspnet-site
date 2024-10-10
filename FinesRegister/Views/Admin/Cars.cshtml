@@ -1,0 +1,50 @@
+@model IEnumerable<FinesRegister.Models.Car>
+
+@{
+ViewBag.Title = "Cars";
+}
+
+<h2>Cars</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CarCreate") 
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Number) 
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().UserId) 
+        </th>
+        <th></th> 
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any()) 
+    {
+    foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Number) 
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId) 
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "CarEdit", new { id = item.Id }) | 
+            @Html.ActionLink("Delete", "CarDelete", new { id = item.Id })
+        </td>
+    </tr>
+    }
+    }
+    else
+    {
+    <tr>
+        <td colspan="3">No cars available.</td> 
+    </tr>
+    }
+    </tbody>
+</table>

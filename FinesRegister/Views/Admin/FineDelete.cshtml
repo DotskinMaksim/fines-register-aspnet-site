@@ -1,0 +1,26 @@
+@model FinesRegister.Models.FineDeleteViewModel
+
+@{
+    ViewBag.Title = "Delete Fine";
+}
+
+<h2>Delete Fine</h2>
+
+<div>
+    <h4>Are you sure you want to delete this fine?</h4>
+    <div>
+        <h5>Issue Date: @Model.IssueDate.ToShortDateString()</h5>
+        <h5>Due Date: @Model.DueDate.ToShortDateString()</h5>
+        <h5>Amount: @Model.Amount</h5>
+        <p>Reason: @Model.Reason</p>
+    </div>
+</div>
+
+<form asp-action="FineDeleteConfirmed">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </div>
+</form>
+
+<a asp-action="Fines">Back to List</a>

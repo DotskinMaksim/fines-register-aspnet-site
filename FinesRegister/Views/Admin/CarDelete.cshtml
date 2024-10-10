@@ -1,0 +1,24 @@
+@model FinesRegister.Models.CarDeleteViewModel
+
+@{
+ViewBag.Title = "Delete Car";
+}
+
+<h2>Delete Car</h2>
+
+<div>
+    <h4>Are you sure you want to delete this car?</h4>
+    <div>
+        <h5>Car Number: @Model.Number</h5>
+        <p>User ID: @Model.UserId</p>
+    </div>
+</div>
+
+<form asp-action="CarDeleteConfirmed">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </div>
+</form>
+
+<a asp-action="Cars">Back to List</a>

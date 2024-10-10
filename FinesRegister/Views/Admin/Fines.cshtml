@@ -1,0 +1,62 @@
+@model IEnumerable<FinesRegister.Models.Fine>
+
+@{
+ViewBag.Title = "Fines";
+}
+
+<h2>Fines</h2>
+
+<p>
+    @Html.ActionLink("Create New", "FineCreate")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().IssueDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().DueDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().IsPaid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CarId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IssueDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DueDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Reason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPaid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CarId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "FineEdit", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "FineDelete", new { id = item.Id })
+        </td>
+    </tr>
+    }
+</table>
