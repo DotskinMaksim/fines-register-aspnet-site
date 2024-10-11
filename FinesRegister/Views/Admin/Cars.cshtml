@@ -1,15 +1,15 @@
 @model IEnumerable<FinesRegister.Models.Car>
 
 @{
-ViewBag.Title = "Cars";
+ViewBag.Title = "Halda autod";
 
 }
 
-<h2>Cars</h2>
+<h2>Autod</h2>
 
 
     <p>
-        @Html.ActionLink("Create New", "CarCreate")
+        @Html.ActionLink("Lisa uus", "CarCreate")
     </p>
 
 
@@ -44,8 +44,8 @@ ViewBag.Title = "Cars";
             @Html.DisplayFor(modelItem => item.UserId)
         </td>
         <td>
-            @Html.ActionLink("Edit", "CarEdit", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "CarDelete", new { id = item.Id })
+            @Html.ActionLink("Muuda", "CarEdit", new { id = item.Id }) |
+            @Html.ActionLink("Kustuta", "CarDelete", new { id = item.Id })
         </td>
     </tr>
     }
@@ -53,7 +53,7 @@ ViewBag.Title = "Cars";
     else
     {
     <tr>
-        <td colspan="3">No cars available.</td>
+        <td colspan="3">Autosid pole saadaval</td>
     </tr>
     }
     </tbody>

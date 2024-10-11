@@ -1,10 +1,10 @@
 @model FinesRegister.Models.FineEditViewModel
 
 @{
-    ViewBag.Title = "Edit Fine";
+    ViewBag.Title = "Muuda trahv";
 }
 
-<h2>Edit Fine</h2>
+<h2>Muuda trahv</h2>
 
 <form asp-action="FineEdit">
     <input type="hidden" asp-for="Id" />
@@ -32,10 +32,20 @@
         <textarea asp-for="Reason" class="form-control"></textarea>
         <span asp-validation-for="Reason" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="IsPaid" class="control-label"></label>
+        <textarea asp-for="IsPaid" class="form-control"></textarea>
+        <span asp-validation-for="IsPaid" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CarId" class="control-label"></label>
+        <textarea asp-for="CarId" class="form-control"></textarea>
+        <span asp-validation-for="CarId" class="text-danger"></span>
+    </div>
 
     <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Salvesta" class="btn btn-primary" />
     </div>
 </form>
 
-<a asp-action="Fines">Back to List</a>
+<a asp-action="Fines">Tagasi</a>

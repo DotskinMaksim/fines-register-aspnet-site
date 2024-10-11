@@ -9,11 +9,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianPhoneNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianPhoneNumberAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarCreate.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarCreate.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarDelete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarDelete.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineDelete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineDelete.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Home/Privacy.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +124,9 @@
       <workItem from="1728537701698" duration="14127000" />
       <workItem from="1728557361742" duration="9662000" />
       <workItem from="1728576863707" duration="4424000" />
-      <workItem from="1728584854596" duration="1025000" />
+      <workItem from="1728584854596" duration="6057000" />
+      <workItem from="1728644645786" duration="3695000" />
+      <workItem from="1728667003474" duration="339000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -155,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728581563462</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added validations for admin for admin views">
+      <option name="closed" value="true" />
+      <created>1728586145429</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1728586145430</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +200,7 @@
     <MESSAGE value="Added individual authentication and db" />
     <MESSAGE value="Added admin panel for editing fines and cars tables" />
     <MESSAGE value="WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
+    <MESSAGE value="Added validations for admin for admin views" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added validations for admin for admin views" />
   </component>
 </project>

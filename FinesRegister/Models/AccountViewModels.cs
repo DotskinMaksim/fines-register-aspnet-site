@@ -19,14 +19,14 @@ namespace FinesRegister.Models
         public string LastName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0} peab olema vähemalt {2} tähemärki pikk", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Parool")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Kinnita parool")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Parool ja kinnitusparool ei ühti")]
         public string ConfirmPassword { get; set; }
 
         [Required]
@@ -55,10 +55,9 @@ namespace FinesRegister.Models
         [DataType(DataType.Password)]
         [Display(Name = "Parool")]
         public string Password { get; set; }
-
-
-
-        [Display(Name = "Remember me?")] public bool RememberMe { get; set; }
+        
+        [Display(Name = "Mäleta mind?")] 
+        public bool RememberMe { get; set; }
 
     }
 }

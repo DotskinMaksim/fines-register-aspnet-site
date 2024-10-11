@@ -171,7 +171,8 @@ public class AdminController : Controller
             DueDate = fine.DueDate,
             Amount = fine.Amount,
             Reason = fine.Reason,
-            IsPaid = fine.IsPaid
+            IsPaid = fine.IsPaid,
+            CarId = fine.CarId,
         };
 
         return View(editModel);
@@ -196,6 +197,7 @@ public class AdminController : Controller
             fine.Amount = model.Amount;
             fine.Reason = model.Reason;
             fine.IsPaid = model.IsPaid;
+            fine.CarId = model.CarId;
 
             _dbContext.Update(fine);
             await _dbContext.SaveChangesAsync();

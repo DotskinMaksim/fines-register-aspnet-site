@@ -1,13 +1,13 @@
 @model IEnumerable<FinesRegister.Models.Fine>
 
 @{
-ViewBag.Title = "Fines";
+ViewBag.Title = "Halda trahvid";
 }
 
-<h2>Fines</h2>
+<h2>Trahvid</h2>
 
 <p>
-    @Html.ActionLink("Create New", "FineCreate")
+    @Html.ActionLink("Lisa uus", "FineCreate")
 </p>
 <table class="table">
     <tr>
@@ -54,8 +54,8 @@ ViewBag.Title = "Fines";
             @Html.DisplayFor(modelItem => item.CarId)
         </td>
         <td>
-            @Html.ActionLink("Edit", "FineEdit", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "FineDelete", new { id = item.Id })
+            @Html.ActionLink("Muuda", "FineEdit", new { id = item.Id }) |
+            @Html.ActionLink("Kustuta", "FineDelete", new { id = item.Id })
         </td>
     </tr>
     }

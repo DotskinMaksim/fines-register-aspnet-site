@@ -10,17 +10,17 @@ public class EstonianPhoneNumberAttribute : ValidationAttribute
 
         if (phoneNumber == null)
         {
-            return new ValidationResult("Telefoninumber ei tohi olla tühi.");
+            return new ValidationResult("Telefoninumber ei tohi olla tühi");
         }
 
         if (phoneNumber.Length != 7 && phoneNumber.Length != 8)
         {
-            return new ValidationResult("Kehtetu telefoninumbri vorming. Kehtiv vorming: 7 või 8 numbrit.");
+            return new ValidationResult("Kehtetu telefoninumbri vorming. Kehtiv vorming: 7 või 8 numbrit");
         }
 
         if (!phoneNumber.All(char.IsDigit))
         {
-            return new ValidationResult("Telefoninumber peab sisaldama ainult numbreid.");
+            return new ValidationResult("Telefoninumber peab sisaldama ainult numbreid");
         }
 
         return ValidationResult.Success;

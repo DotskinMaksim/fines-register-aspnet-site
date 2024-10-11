@@ -1,10 +1,10 @@
 @model FinesRegister.Models.CarEditViewModel
 
 @{
-ViewBag.Title = "Edit Car";
+ViewBag.Title = "Muuda auto";
 }
 
-<h2>Edit Car</h2>
+<h2>Muuda auto</h2>
 
 <form asp-action="CarEdit">
     <input type="hidden" asp-for="Id" />
@@ -22,8 +22,8 @@ ViewBag.Title = "Edit Car";
     </div>
 
     <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Salvesta" class="btn btn-primary" />
     </div>
 </form>
 
-<a asp-action="Cars">Back to List</a>
+<a asp-action="Cars">Tagasi</a>

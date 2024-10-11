@@ -1,8 +1,8 @@
 using FinesRegister.Models;
-using Microsoft.AspNetCore.Authorization; // Для использования атрибута AllowAnonymous
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Необходимо для использования EF Core
+using Microsoft.EntityFrameworkCore; 
 
 
 namespace FinesRegister.Controllers
@@ -10,11 +10,10 @@ namespace FinesRegister.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager; // Для управления пользователями
-        private readonly SignInManager<User> _signInManager; // Для аутентификации
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager; 
         private readonly FinesRegisterContext _dbContext;
-        // private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly ILogger<AccountController> _logger; // Добавляем логгер
+        private readonly ILogger<AccountController> _logger; 
 
 
 
@@ -23,8 +22,7 @@ namespace FinesRegister.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
-            // _passwordHasher = passwordHasher;
-            _logger = logger; // Инициализируем логгер
+            _logger = logger; 
 
 
         }
@@ -32,17 +30,10 @@ namespace FinesRegister.Controllers
         {
             return View();
         }
-
-        // // GET
-        // public IActionResult Index()
-        // {
-        //     return View();
-        // }
         
-        [HttpPost]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await _signInManager.SignOutAsync(); // Выход пользователя
+            _signInManager.SignOutAsync(); // Выход пользователя
             return RedirectToAction("Index", "Home"); // Перенаправление на главную страницу после выхода
         }
 
@@ -65,16 +56,16 @@ namespace FinesRegister.Controllers
 
                     if (user == null)
                 {
-                    _logger.LogWarning("No user found with email: {Email}", model.Email);
-                    ModelState.AddModelError(string.Empty, "Неправильный адрес электронной почты или пароль.");
+                    _logger.LogWarning("E-postiga kasutajat ei leitud: {Email}", model.Email);
+                    ModelState.AddModelError(string.Empty, "Vale e-posti aadress või parool.");
                     return View(model);
                 }
 
                 // Проверка блокировки пользователя
                 if (await _userManager.IsLockedOutAsync(user))
                 {
-                    _logger.LogWarning("User {Email} is locked out.", model.Email);
-                    ModelState.AddModelError(string.Empty, "Пользователь заблокирован.");
+                    _logger.LogWarning("Kasutaja {Email} on lukustatud.", model.Email);
+                    ModelState.AddModelError(string.Empty, "Kasutaja on blokeeritud.");
                     return View(model);
                 }
 
@@ -82,19 +73,19 @@ namespace FinesRegister.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User {Email} logged in successfully.", model.Email);
+                    _logger.LogInformation("Kasutaja {Email} logis edukalt sisse.", model.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 else if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User {Email} is locked out after too many failed login attempts.", model.Email);
-                    ModelState.AddModelError(string.Empty, "Пользователь заблокирован после слишком большого количества неудачных попыток входа.");
+                    _logger.LogWarning("Kasutaja {Email} lukustatakse pärast liiga palju ebaõnnestunud sisselogimiskatseid.", model.Email);
+                    ModelState.AddModelError(string.Empty, "Kasutaja lukustati pärast liiga palju ebaõnnestunud sisselogimiskatseid.");
                     return View(model);
                 }
                 else
                 {
-                    _logger.LogWarning("Invalid password for user: {Email}", model.Email);
-                    ModelState.AddModelError(string.Empty, "Неправильный адрес электронной почты или пароль.");
+                    _logger.LogWarning("Kehtetu parool kasutajale: {Email}", model.Email);
+                    ModelState.AddModelError(string.Empty, "Vale e-posti aadress või parool.");
                     return View(model);
                 }
             }
@@ -122,7 +113,7 @@ namespace FinesRegister.Controllers
                 if (existingEmail != null)
                 {
                     // Добавляем ошибку модели, если такой владелец уже существует
-                    ModelState.AddModelError("", "Владелец с данным эмейлом уже зарегистрирован.");
+                    ModelState.AddModelError("", "Selle e-posti aadressiga omanik on juba registreeritud.");
                     return View(model); // Возвращаем пользователя на страницу регистрации
                 }
 
@@ -156,7 +147,7 @@ namespace FinesRegister.Controllers
                     else
                     {
                         // Если автомобиля с таким номером нет или у него уже есть владелец
-                        ModelState.AddModelError("", "Автомобиль с данным номером не найден или уже зарегистрирован.");
+                        ModelState.AddModelError("", "Selle numbrimärgiga sõidukit ei leitud või see on juba registreeritud.");
                         return View(model);
                     }
 

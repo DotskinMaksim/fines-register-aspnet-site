@@ -1,24 +1,24 @@
 @model FinesRegister.Models.CarDeleteViewModel
 
 @{
-ViewBag.Title = "Delete Car";
+ViewBag.Title = "Kustuta auto";
 }
 
-<h2>Delete Car</h2>
+<h2>Kustuta auto</h2>
 
 <div>
-    <h4>Are you sure you want to delete this car?</h4>
+    <h3>Kas olete kindel, et soovite selle auto kustutada?</h3>
     <div>
-        <h5>Car Number: @Model.Number</h5>
-        <p>User ID: @Model.UserId</p>
+        <h5>Auto Number: @Model.Number</h5>
+        <h5>Kasutaja ID: @Model.UserId</h5>
     </div>
 </div>
 
 <form asp-action="CarDeleteConfirmed">
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <input type="submit" value="Kustuta" class="btn btn-danger" />
     </div>
 </form>
 
-<a asp-action="Cars">Back to List</a>
+<a asp-action="Cars">Tagasi</a>

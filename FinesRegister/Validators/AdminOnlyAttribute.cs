@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using FinesRegister.Models; // Импортируйте вашу модель User
+using FinesRegister.Models;
 
 public class AdminOnlyAttribute : Attribute, IAsyncAuthorizationFilter
 {
