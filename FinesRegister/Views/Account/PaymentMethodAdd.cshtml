@@ -1,0 +1,51 @@
+@model FinesRegister.Models.PaymentMethodAddViewModel
+
+@{
+ViewBag.Title = "Lisa makseviis";
+}
+
+<h2>Lisa makseviis</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+{
+<div class="text-danger">@error.ErrorMessage</div>
+}
+}
+
+<form asp-action="PaymentMethodAdd" method="post">
+    <div class="form-group">
+        <label asp-for="OwnerName" class="control-label"></label>
+        <input asp-for="OwnerName" class="form-control" />
+        <span asp-validation-for="OwnerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CardNumber" class="control-label"></label>
+        <input asp-for="CardNumber" class="form-control" />
+        <span asp-validation-for="CardNumber" class="text-danger"></span>
+    </div>
+
+    <label class="control-label">Kehtiv kuni</label>
+    <div class="form-group">
+        <input asp-for="ExpirationMonth" class="form-control" type="number" placeholder="MM"/>
+        <span asp-validation-for="ExpirationMonth" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="ExpirationYear" class="form-control" type="number" placeholder="YY"/>
+        <span asp-validation-for="ExpirationYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CvvCode" class="control-label"></label>
+        <input asp-for="CvvCode" class="form-control" />
+        <span asp-validation-for="CvvCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Lisa" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Index" asp-controller="Home">Tagasi</a>

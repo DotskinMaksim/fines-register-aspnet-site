@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using FinesRegister.Validators;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FinesRegister.Models
 {
@@ -17,6 +18,9 @@ namespace FinesRegister.Models
         [Required(ErrorMessage = "Kasutaja ID on nõutav")]
         [Display(Name = "Kasutaja ID")]
         public string UserId { get; set; }
+        
+        public IEnumerable<SelectListItem> Users { get; set; }
+
     }
     
     public class CarDeleteViewModel
@@ -32,6 +36,13 @@ namespace FinesRegister.Models
         [Display(Name = "Number")]
         public string Number { get; set; }
         
+        
+        [Display(Name = "Kasutaja")]
+        [Required(ErrorMessage = "Vali kasutaja.")]
+        public string UserId { get; set; }
+        
+        public IEnumerable<SelectListItem> Users { get; set; }
+
         
     }
     public class FineEditViewModel
@@ -57,12 +68,15 @@ namespace FinesRegister.Models
         public string Reason { get; set; }
 
         
-        [Display(Name ="On tasutud?")]
+        [Display(Name ="Makse olek")]
         public bool IsPaid { get; set; }
         
         
         [Display(Name ="Auto ID")]
         public int CarId { get; set; }
+
+        
+        public IEnumerable<SelectListItem> Cars { get; set; } // Добавьте это свойство
 
     }
 
@@ -94,5 +108,7 @@ namespace FinesRegister.Models
         [Required(ErrorMessage = "Auto ID on nõutav")]
         [Display(Name = "Auto ID")]
         public int CarId { get; set; }
+        
+        public IEnumerable<SelectListItem> Cars { get; set; } // Добавьте это свойство
     }
 }

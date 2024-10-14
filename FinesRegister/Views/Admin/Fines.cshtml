@@ -27,7 +27,7 @@ ViewBag.Title = "Halda trahvid";
             @Html.DisplayNameFor(model => model.First().IsPaid)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().CarId)
+            @Html.DisplayNameFor(model => model.First().Car.Number)
         </th>
         <th></th>
     </tr>
@@ -51,7 +51,7 @@ ViewBag.Title = "Halda trahvid";
             @Html.DisplayFor(modelItem => item.IsPaid)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CarId)
+            @Html.DisplayFor(modelItem => item.Car.Number) 
         </td>
         <td>
             @Html.ActionLink("Muuda", "FineEdit", new { id = item.Id }) |

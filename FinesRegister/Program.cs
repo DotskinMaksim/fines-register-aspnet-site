@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using FinesRegister.Models;
 using Microsoft.AspNetCore.Identity;
+using FinesRegister.Data;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,8 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
 
 builder.Services.AddDbContextPool<FinesRegisterContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));

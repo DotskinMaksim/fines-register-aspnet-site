@@ -1,7 +1,11 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FinesRegister.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using FinesRegister.Data;
+
 
 namespace FinesRegister.Controllers;
 
@@ -9,12 +13,14 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly UserManager<User> _userManager;
+    private readonly FinesRegisterContext _dbContext;
 
 
-    public HomeController(ILogger<HomeController> logger, UserManager<User> userManager)
+    public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, FinesRegisterContext dbContext)
     {
         _logger = logger;
         _userManager = userManager;
+        _dbContext = dbContext;
 
     }
 
@@ -31,6 +37,15 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    
+    [Authorize]
+    [PaymentMethodRequired]
+    public IActionResult FinePay()
+    {
+        
+        return View();
+    }
 
 
     
@@ -40,4 +55,22 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> Index(string carNumber)
+    {
+        if (string.IsNullOrEmpty(carNumber))
+        {
+            return View(Enumerable.Empty<Fine>());
+        }
+
+        var fines = await _dbContext.Fines
+            .Where(f => f.Car.Number == carNumber)
+            .Include(f => f.Car)
+            .ToListAsync(); 
+      
+        return View(fines);
+    }
+    
+
 }

@@ -9,30 +9,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/EmailService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/PaymentMethod.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Models/SmtpSettings.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/CVVAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianDebitCardAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Validators/PaymentMethodRequiredAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Fines.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/PaymentMethodAdd.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Home/FinePay.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Data/FinesRegisterContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Data/FinesRegisterContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/FinesRegisterContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/FinesRegisterContextModelSnapshot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianPhoneNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Validators/EstonianPhoneNumberAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/AccessDenied.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Login.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/Register.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarCreate.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarCreate.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarDelete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarDelete.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Cars.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineDelete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineDelete.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Home/Privacy.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Home/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/wwwroot/css/site.css" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/wwwroot/css/site.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,8 +58,18 @@
   <component name="DpaMonitoringSettings">
     <option name="autoShow" value="false" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e52a70dae11948fa5bfb33d03fd2e7d9b6ece182647aa4d9b1221413ac57dc7/IdentityUser.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -65,6 +86,7 @@
     &quot;.NET Launch Settings Profile.FinesRegister: http.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -126,7 +148,11 @@
       <workItem from="1728576863707" duration="4424000" />
       <workItem from="1728584854596" duration="6057000" />
       <workItem from="1728644645786" duration="3695000" />
-      <workItem from="1728667003474" duration="339000" />
+      <workItem from="1728667003474" duration="7159000" />
+      <workItem from="1728674880385" duration="1608000" />
+      <workItem from="1728718738627" duration="16464000" />
+      <workItem from="1728861185847" duration="567000" />
+      <workItem from="1728924117660" duration="1126000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -184,7 +210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728586145430</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Translated the interface to Estonian">
+      <option name="closed" value="true" />
+      <created>1728668064490</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728668064490</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,6 +235,7 @@
     <MESSAGE value="Added admin panel for editing fines and cars tables" />
     <MESSAGE value="WIP" />
     <MESSAGE value="Added validations for admin for admin views" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added validations for admin for admin views" />
+    <MESSAGE value="Translated the interface to Estonian" />
+    <option name="LAST_COMMIT_MESSAGE" value="Translated the interface to Estonian" />
   </component>
 </project>

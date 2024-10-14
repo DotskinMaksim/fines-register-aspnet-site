@@ -1,0 +1,26 @@
+@model IEnumerable<FinesRegister.Models.Fine>
+
+@{
+ViewBag.Title = "Minu rahvid";
+}
+
+<h2>Minu trahvid</h2>
+
+
+<div class="ticket-container">
+    @foreach (var item in Model)
+    {
+    <div class="ticket">
+        <div class="ticket-header">
+            <span class="ticket-date"> @Html.DisplayNameFor(model => model.First().IssueDate): @item.IssueDate.ToString("dd.MM.yyyy")</span>
+            <span class="ticket-number">@Html.DisplayNameFor(model => model.First().Car.Number): @item.Car.Number</span>
+        </div>
+        <div class="ticket-body">
+            <p>@Html.DisplayNameFor(model => model.First().Amount): <strong>@item.Amount €</strong></p>
+            <p>@Html.DisplayNameFor(model => model.First().Reason): @item.Reason</p>
+            <p>@Html.DisplayNameFor(model => model.First().DueDate): @item.DueDate.ToString("dd.MM.yyyy")</p>
+            <p>@Html.DisplayNameFor(model => model.First().IssueDate): <strong>@(item.IsPaid ? "Tasuline" : "Mitte tasuline")</strong></p>
+        </div>
+    </div>
+    }
+</div>

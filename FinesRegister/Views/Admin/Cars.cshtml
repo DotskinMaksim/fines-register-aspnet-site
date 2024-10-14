@@ -25,7 +25,7 @@ ViewBag.Title = "Halda autod";
         <th>
             @if (Model != null && Model.Any())
             {
-            @Html.DisplayNameFor(model => model.First().UserId)
+            @Html.DisplayNameFor(model => model.First().User.UserName)
             }
         </th>
         <th></th>
@@ -41,7 +41,7 @@ ViewBag.Title = "Halda autod";
             @Html.DisplayFor(modelItem => item.Number)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserId)
+            @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
         <td>
             @Html.ActionLink("Muuda", "CarEdit", new { id = item.Id }) |
@@ -58,4 +58,5 @@ ViewBag.Title = "Halda autod";
     }
     </tbody>
 </table>
+
 

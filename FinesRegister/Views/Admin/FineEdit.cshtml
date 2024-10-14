@@ -1,7 +1,7 @@
 @model FinesRegister.Models.FineEditViewModel
 
 @{
-    ViewBag.Title = "Muuda trahv";
+ViewBag.Title = "Muuda trahv";
 }
 
 <h2>Muuda trahv</h2>
@@ -11,37 +11,43 @@
 
     <div class="form-group">
         <label asp-for="IssueDate" class="control-label"></label>
-        <input asp-for="IssueDate" class="form-control" />
+        <input asp-for="IssueDate" class="form-control" placeholder="Sisestage..." />
         <span asp-validation-for="IssueDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="DueDate" class="control-label"></label>
-        <input asp-for="DueDate" class="form-control" />
+        <input asp-for="DueDate" class="form-control" placeholder="Sisestage..." />
         <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Amount" class="control-label"></label>
-        <input asp-for="Amount" class="form-control" />
+        <input asp-for="Amount" class="form-control" placeholder="Sisestage..." />
         <span asp-validation-for="Amount" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Reason" class="control-label"></label>
-        <textarea asp-for="Reason" class="form-control"></textarea>
+        <textarea asp-for="Reason" class="form-control" placeholder="Sisestage..."></textarea>
         <span asp-validation-for="Reason" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="IsPaid" class="control-label"></label>
-        <textarea asp-for="IsPaid" class="form-control"></textarea>
+        <select asp-for="IsPaid" class="form-control">
+            <option value="true">Tasuline</option>
+            <option value="false">Mitte tasuline</option>
+        </select>
         <span asp-validation-for="IsPaid" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="CarId" class="control-label"></label>
-        <textarea asp-for="CarId" class="form-control"></textarea>
+        <label asp-for="CarId" class="control-label">Vali auto</label>
+        <select asp-for="CarId" class="form-control" asp-items="Model.Cars"></select>
         <span asp-validation-for="CarId" class="text-danger"></span>
     </div>
+    <input type="hidden" asp-for="Cars" value=" ">
 
     <div class="form-group">
         <input type="submit" value="Salvesta" class="btn btn-primary" />

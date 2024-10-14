@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using FinesRegister.Models;
+using FinesRegister.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinesRegister.Controllers
 {
-    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -26,10 +27,55 @@ namespace FinesRegister.Controllers
 
 
         }
+
+        [Authorize]
+        public async Task<IActionResult> Fines()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Получаем ID текущего пользователя
+
+            // Фильтруем штрафы по пользователю
+            var fines = await _dbContext.Fines
+                .Include(f => f.Car)
+                .Where(f => f.Car.UserId == userId)
+                .ToListAsync();
+
+            return View(fines); // Возвращаем только штрафы, относящиеся к текущему пользователю
+        }
+
+        
         public IActionResult AccessDenied()
         {
             return View();
         }
+        public IActionResult PaymentMethodAdd()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PaymentMethodAdd(PaymentMethodAddViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Получаем ID текущего пользователя
+                var paymentMethod = new PaymentMethod
+                {
+                    OwnerName = model.OwnerName,
+                    CardNumber = model.CardNumber,
+                    ExpirationDate = model.ExpirationMonth + "/" + model.ExpirationYear,
+                    CvvCode = model.CvvCode,
+                    UserId = userId
+                };
+
+                await _dbContext.PaymentMethods.AddAsync(paymentMethod);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("Index", "Home"); // Перенаправление на главную страницу после добавления
+            }
+
+            return View(model);
+        }
+
         
         public IActionResult Logout()
         {

@@ -20,3 +20,74 @@ html {
 body {
   margin-bottom: 60px;
 }
+.ticket-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.ticket {
+  background-color: #f9f9f9;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  width: 300px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 10px;
+}
+
+.ticket-body {
+  font-size: 16px;
+}
+
+.ticket-body p {
+  margin: 5px 0;
+}
+
+.ticket-number {
+  font-weight: bold;
+}
+
+.ticket-date {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Декоративные элементы */
+.ticket::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  transform: translateY(-50%);
+}
+
+.ticket::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  transform: translateY(-50%);
+}

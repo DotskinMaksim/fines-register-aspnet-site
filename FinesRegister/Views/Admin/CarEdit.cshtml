@@ -5,25 +5,33 @@ ViewBag.Title = "Muuda auto";
 }
 
 <h2>Muuda auto</h2>
+@if (!ViewData.ModelState.IsValid)
+{
+foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+{
+<div class="text-danger">@error.ErrorMessage</div>
+}
+}
 
 <form asp-action="CarEdit">
     <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
-        <label asp-for="Number" class="control-label"></label>
-        <input asp-for="Number" class="form-control" />
+        <input asp-for="Number" class="form-control" placeholder="Sisestage..." />
         <span asp-validation-for="Number" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="UserId" class="control-label"></label>
-        <input asp-for="UserId" class="form-control" />
+        <label asp-for="UserId" class="control-label">Vali kasutaja</label>
+        <select asp-for="UserId" class="form-control" asp-items="Model.Users"></select>
         <span asp-validation-for="UserId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <input type="submit" value="Salvesta" class="btn btn-primary" />
     </div>
+    <input type="hidden" asp-for="Users" value=" ">
+
 </form>
 
 <a asp-action="Cars">Tagasi</a>

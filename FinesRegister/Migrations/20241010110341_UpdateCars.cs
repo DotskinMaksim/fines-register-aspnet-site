@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using FinesRegister.Data;
+
 
 #nullable disable
 

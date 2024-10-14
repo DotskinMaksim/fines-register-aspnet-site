@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using FinesRegister.Data;
 
 
 namespace FinesRegister.Controllers;
@@ -26,18 +28,16 @@ public class AdminController : Controller
     
     
     
-    public async Task<IActionResult> Fines() //FINES
+    public async Task<IActionResult> Fines() 
     {
-        var fines = await _dbContext.Fines.ToListAsync();
+        var fines = await _dbContext.Fines.Include(f => f.Car).ToListAsync();
         return View(fines);
     }
+
     
     public async Task<IActionResult> Cars() //CARS
     {
-        var currentUser = await _userManager.GetUserAsync(User); // Получаем текущего пользователя
-        // ViewBag.IsAdmin = currentUser != null && currentUser.IsAdmin;
-
-            
+        
         var cars = await _dbContext.Cars.ToListAsync(); // Получаем список машин
         return View(cars);
         
@@ -46,7 +46,7 @@ public class AdminController : Controller
     }
     
     // GET: /Admin/CarEdit/5
-    public async Task<IActionResult> CarEdit(int id) //CAR EDIT
+    public async Task<IActionResult> CarEdit(int id)
     {
         var car = await _dbContext.Cars.FindAsync(id);
         if (car == null)
@@ -54,20 +54,28 @@ public class AdminController : Controller
             return NotFound();
         }
 
+        // Получаем список пользователей для выпадающего списка
+        var users = _userManager.Users.Select(u => new SelectListItem
+        {
+            Value = u.Id,
+            Text = u.UserName
+        }).ToList();
+
         var editModel = new CarEditViewModel
         {
             Id = car.Id,
             Number = car.Number,
-            UserId = car.UserId
+            UserId = car.UserId,
+            Users = users  // Передаем список пользователей в модель
         };
 
         return View(editModel);
     }
-    
+
 // POST: /Admin/CarEdit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CarEdit(CarEditViewModel model) //CAR EDIT
+    public async Task<IActionResult> CarEdit(CarEditViewModel model)
     {
         if (ModelState.IsValid)
         {
@@ -78,7 +86,7 @@ public class AdminController : Controller
             }
 
             car.Number = model.Number;
-            car.UserId = model.UserId;
+            car.UserId = model.UserId;  // Сохраняем выбранного пользователя
 
             _dbContext.Update(car);
             await _dbContext.SaveChangesAsync();
@@ -86,8 +94,17 @@ public class AdminController : Controller
             return RedirectToAction("Cars", "Admin");
         }
 
+        // В случае ошибки, снова передаем список пользователей
+        model.Users = _userManager.Users.Select(u => new SelectListItem
+        {
+            Value = u.Id,
+            Text = u.UserName
+        }).ToList();
+
         return View(model);
+
     }
+
 
 // GET: /Admin/CarDelete/5
     public async Task<IActionResult> CarDelete(int id) //CAR DELETE
@@ -124,26 +141,33 @@ public class AdminController : Controller
     }
     
     // GET: /Admin/CarCreate
-    public IActionResult CarCreate() //CAR CREATE
+    public IActionResult CarCreate()
     {
-        return View();
+        var users = _userManager.Users.Select(u => new SelectListItem
+        {
+            Value = u.Id,         // ID пользователя
+            Text = u.UserName     // Имя пользователя или другое значение, которое вы хотите отображать
+        }).ToList();
+
+        var model = new CarCreateViewModel
+        {
+            Users = users
+        };
+
+        return View(model);
     }
 
-    // POST: /Admin/CarCreate
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CarCreate(CarCreateViewModel model) //CAR CREATE
+    public async Task<IActionResult> CarCreate(CarCreateViewModel model)
     {
         if (ModelState.IsValid)
         {
-            
-            
             var car = new Car
             {
                 Number = model.Number,
-                UserId = "not defined",
-                
-                
+                UserId = model.UserId // Сохраняем выбранного пользователя
             };
 
             _dbContext.Cars.Add(car);
@@ -151,62 +175,20 @@ public class AdminController : Controller
             return RedirectToAction(nameof(Cars)); // Перенаправление на список автомобилей
         }
 
-        return View(model);
-    }
-    
-    
-    // GET: /Admin/FineEdit/5
-    public async Task<IActionResult> FineEdit(int id) //FINE EDIT
-    {
-        var fine = await _dbContext.Fines.FindAsync(id);
-        if (fine == null)
+        // Если есть ошибка, снова заполняем пользователей
+        model.Users = _userManager.Users.Select(u => new SelectListItem
         {
-            return NotFound();
-        }
-
-        var editModel = new FineEditViewModel
-        {
-            Id = fine.Id,
-            IssueDate = fine.IssueDate,
-            DueDate = fine.DueDate,
-            Amount = fine.Amount,
-            Reason = fine.Reason,
-            IsPaid = fine.IsPaid,
-            CarId = fine.CarId,
-        };
-
-        return View(editModel);
-    }
-
-// POST: /Admin/FineEdit
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-
-    public async Task<IActionResult> FineEdit(FineEditViewModel model) //FINE EDIT
-    {
-        if (ModelState.IsValid)
-        {
-            var fine = await _dbContext.Fines.FindAsync(model.Id);
-            if (fine == null)
-            {
-                return NotFound();
-            }
-
-            fine.IssueDate = model.IssueDate;
-            fine.DueDate = model.DueDate;
-            fine.Amount = model.Amount;
-            fine.Reason = model.Reason;
-            fine.IsPaid = model.IsPaid;
-            fine.CarId = model.CarId;
-
-            _dbContext.Update(fine);
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToAction("Fines", "Admin");
-        }
+            Value = u.Id,
+            Text = u.UserName
+        }).ToList();
 
         return View(model);
     }
+
+
+    
+    
+   
 
 // GET: /Admin/FineDelete/5
     
@@ -245,12 +227,23 @@ public class AdminController : Controller
     }
     
     
+    // GET: /Admin/FineCreate
     public IActionResult FineCreate() //FINE CREATE
     {
-        return View();
+        var cars = _dbContext.Cars.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Number
+        }).ToList();
+
+        var model = new FineCreateViewModel
+        {
+            Cars = cars
+        };
+
+        return View(model);
     }
-    
-    
+
     // POST: /Admin/FineCreate
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -272,8 +265,84 @@ public class AdminController : Controller
             return RedirectToAction(nameof(Fines)); // Перенаправление на список штрафов
         }
 
+        // В случае ошибки, снова получаем список автомобилей
+        model.Cars = _dbContext.Cars.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Number
+        }).ToList();
+
         return View(model);
     }
+
+    // GET: /Admin/FineEdit/5
+    public async Task<IActionResult> FineEdit(int id) //FINE EDIT
+    {
+        var fine = await _dbContext.Fines.FindAsync(id);
+        if (fine == null)
+        {
+            return NotFound();
+        }
+
+        var cars = _dbContext.Cars.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Number
+        }).ToList();
+
+        var editModel = new FineEditViewModel
+        {
+            Id = fine.Id,
+            IssueDate = fine.IssueDate,
+            DueDate = fine.DueDate,
+            Amount = fine.Amount,
+            Reason = fine.Reason,
+            IsPaid = fine.IsPaid,
+            CarId = fine.CarId,
+            Cars = cars // Передаем список автомобилей в модель
+        };
+
+        return View(editModel);
+    }
+
+    // POST: /Admin/FineEdit
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FineEdit(FineEditViewModel model) //FINE EDIT
+    {
+        if (ModelState.IsValid)
+        {
+            var fine = await _dbContext.Fines.FindAsync(model.Id);
+            if (fine == null)
+            {
+                return NotFound();
+            }
+
+            fine.IssueDate = model.IssueDate;
+            fine.DueDate = model.DueDate;
+            fine.Amount = model.Amount;
+            fine.Reason = model.Reason;
+            fine.IsPaid = model.IsPaid;
+            fine.CarId = model.CarId;
+
+            _dbContext.Update(fine);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Fines", "Admin");
+        }
+
+        // В случае ошибки, снова получаем список автомобилей
+        model.Cars = _dbContext.Cars.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Number
+        }).ToList();
+
+        return View(model);
+    }
+
+    
+   
 
 
 }

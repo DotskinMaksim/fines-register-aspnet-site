@@ -3,6 +3,7 @@ using FinesRegister.Validators;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace FinesRegister.Models;
 
 public class Car
@@ -13,6 +14,15 @@ public class Car
     [Display(Name ="Number")]
     public string Number { get; set; }
     
+    
     [Display(Name ="Kasutaja ID")]
+    [ForeignKey("User")]
     public string UserId { get; set; }
+    
+    
+    public User User { get; set; }
+    
+    
+    public ICollection<Fine> Fines { get; set; } 
+
 }
