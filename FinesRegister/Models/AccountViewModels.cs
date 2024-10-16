@@ -77,6 +77,12 @@ namespace FinesRegister.Models
 
 
     }
+    public class ConfirmCodeViewModel
+    {
+        public string Code { get; set; }
+
+    }
+
 
     public class LoginViewModel
     {

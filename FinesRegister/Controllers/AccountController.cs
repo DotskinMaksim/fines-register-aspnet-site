@@ -4,6 +4,7 @@ using FinesRegister.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore; 
 
 
@@ -12,18 +13,22 @@ namespace FinesRegister.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager; 
+        private readonly SignInManager<User> _signInManager;
         private readonly FinesRegisterContext _dbContext;
-        private readonly ILogger<AccountController> _logger; 
+        private readonly ILogger<AccountController> _logger;
+        private readonly EmailService _emailService;
 
 
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, FinesRegisterContext dbContext, ILogger<AccountController> logger)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
+            FinesRegisterContext dbContext, ILogger<AccountController> logger,
+            EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
-            _logger = logger; 
+            _logger = logger;
+            _emailService = emailService;
 
 
         }
@@ -42,11 +47,12 @@ namespace FinesRegister.Controllers
             return View(fines); // Возвращаем только штрафы, относящиеся к текущему пользователю
         }
 
-        
+
         public IActionResult AccessDenied()
         {
             return View();
         }
+
         public IActionResult PaymentMethodAdd()
         {
             return View();
@@ -76,20 +82,56 @@ namespace FinesRegister.Controllers
             return View(model);
         }
 
-        
+
         public IActionResult Logout()
         {
             _signInManager.SignOutAsync(); // Выход пользователя
             return RedirectToAction("Index", "Home"); // Перенаправление на главную страницу после выхода
         }
+        
+        // Метод для удаления всех пользователей с неподтвержденной почтой
+        private async Task DeleteInactiveUsersAsync()
+        {
+            var inactiveUsers = await _dbContext.Users
+                .Where(u => !u.EmailConfirmed)
+                .ToListAsync(); // Найдите всех пользователей, которые не подтвердили почту и зарегистрировались более 24 часов назад
+
+            if (inactiveUsers.Any())
+            {
+                _dbContext.Users.RemoveRange(inactiveUsers); // Удаляем пользователей из БД
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"Eemaldatud {inactiveUsers.Count} passiivset kasutajat");
+            }
+        }
+
+        public async Task<IActionResult> SendConfirmationCode()
+        {
+            var email = TempData["Email"]?.ToString();
+            
+            // Генерация и отправка кода подтверждения
+            string confirmCode = _emailService.GenerateRandomNumbers(6);
+            await _emailService.SendConfirmationEmail(email, confirmCode, "confirmationCode",
+                    "Kinnitage registreerimine");
+
+            // Сохраняем код в TempData для проверки в подтверждении
+            TempData["ConfirmCode"] = confirmCode;
+
+            return RedirectToAction("ConfirmRegister");
+        }
+
 
         
-        public IActionResult Login(string returnUrl = null)
+
+        // Метод для страницы входа
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
+            await DeleteInactiveUsersAsync(); // Удаляем неактивированных пользователей
+
             ViewBag.ReturnUrl = returnUrl; // Сохраняем returnUrl в ViewBag для использования в представлении
             return View();
         }
-        
+
         // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -97,13 +139,19 @@ namespace FinesRegister.Controllers
         {
             if (ModelState.IsValid)
             {
-        // Попробуйте найти пользователя по email
+                // Попробуйте найти пользователя по email
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
-                    if (user == null)
+                if (user == null)
                 {
                     _logger.LogWarning("E-postiga kasutajat ei leitud: {Email}", model.Email);
                     ModelState.AddModelError(string.Empty, "Vale e-posti aadress või parool.");
+                    return View(model);
+                } 
+                if (user.EmailConfirmed == false)
+                {
+                    _logger.LogWarning("Kasutaja pole oma kontot kinnitanud: {Email}", model.Email);
+                    ModelState.AddModelError(string.Empty, "Konto pole kinnitatud.");
                     return View(model);
                 }
 
@@ -116,7 +164,8 @@ namespace FinesRegister.Controllers
                 }
 
                 // Проверка входа
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe,
+                    lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Kasutaja {Email} logis edukalt sisse.", model.Email);
@@ -124,8 +173,11 @@ namespace FinesRegister.Controllers
                 }
                 else if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("Kasutaja {Email} lukustatakse pärast liiga palju ebaõnnestunud sisselogimiskatseid.", model.Email);
-                    ModelState.AddModelError(string.Empty, "Kasutaja lukustati pärast liiga palju ebaõnnestunud sisselogimiskatseid.");
+                    _logger.LogWarning(
+                        "Kasutaja {Email} lukustatakse pärast liiga palju ebaõnnestunud sisselogimiskatseid.",
+                        model.Email);
+                    ModelState.AddModelError(string.Empty,
+                        "Kasutaja lukustati pärast liiga palju ebaõnnestunud sisselogimiskatseid.");
                     return View(model);
                 }
                 else
@@ -142,71 +194,117 @@ namespace FinesRegister.Controllers
 
 
         // GET: /Account/Register
-        public IActionResult Register()
+        [HttpGet]
+        // Метод для страницы регистрации
+        public async Task<IActionResult> Register()
         {
+            await DeleteInactiveUsersAsync(); // Удаляем неактивированных пользователей
+
             return View();
         }
-
+        
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Проверка наличия владельца с таким же email
-                var existingEmail = await _dbContext.Users
-                    .FirstOrDefaultAsync(u => u.Email == model.Email); // Проверка существующего email
-                if (existingEmail != null)
+                // Проверка наличия пользователя с таким же email
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
                 {
-                    // Добавляем ошибку модели, если такой владелец уже существует
-                    ModelState.AddModelError("", "Selle e-posti aadressiga omanik on juba registreeritud.");
-                    return View(model); // Возвращаем пользователя на страницу регистрации
+                    ModelState.AddModelError("", 
+                        "See meil on juba registreeritud");
+                    return View(model);
+                }
+                
+                var car = await _dbContext.Cars
+                    .FirstOrDefaultAsync(c => c.Number == model.CarNumber && c.UserId == "not defined");
+                if (car == null)
+                {
+                    ModelState.AddModelError("",
+                        "Selle numbrimärgiga sõidukit ei leitud või see on juba registreeritud");
+                    return View(model);
                 }
 
                 // Создаем нового пользователя
-                var user = new User()
+                var user = new User
                 {
                     Email = model.Email,
                     UserName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    PasswordHash = model.Password
+                    EmailConfirmed = false // Пользователь не подтвержден
                 };
 
+                // Создаем пользователя без активации
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-
-                    // Проверка наличия автомобиля с данным номером, у которого нет владельца
-                    var car = await _dbContext.Cars
-                        .FirstOrDefaultAsync(c => c.Number == model.CarNumber && c.UserId=="not defined");
-
-                    if (car != null)
-                    {
-                        // Присваиваем новому пользователю автомобиль
-                        car.UserId = user.Id;
-                        await _dbContext.SaveChangesAsync(); // Сохраняем изменения
-                    }
-                    else
-                    {
-                        // Если автомобиля с таким номером нет или у него уже есть владелец
-                        ModelState.AddModelError("", "Selle numbrimärgiga sõidukit ei leitud või see on juba registreeritud.");
-                        return View(model);
-                    }
-
-                    return RedirectToAction("Index", "Home");
+                    
+                    // string confirmCode = _emailService.GenerateRandomNumbers(6);
+                    // await _emailService.SendConfirmationEmail(model.Email, confirmCode, "confirmationCode", "Kinnitage registreerimine");
+                    //
+                    // // Сохраняем код в TempData для проверки в подтверждении
+                    // TempData["UserId"] = user.Id;
+                    //
+                    // TempData["ConfirmCode"] = confirmCode;
+                    // TempData["Email"] = model.Email;
+                    //
+                    // return RedirectToAction("ConfirmRegister");
+                    TempData["UserId"] = user.Id;
+                    TempData["Email"] = user.Email;
+                    return await SendConfirmationCode();
                 }
 
-                AddErrors(result); // Обработка ошибок
+                AddErrors(result);
             }
 
-            // Если произошла ошибка, снова отображаем форму регистрации
             return View(model);
         }
 
+        // GET: /Account/ConfirmRegister
+        [HttpGet]
+        public IActionResult ConfirmRegister()
+        {
+            return View();
+        }
+
+        // POST: /Account/ConfirmRegister
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmRegister(ConfirmCodeViewModel model)
+        {
+            // Получаем код из TempData
+            var userId = TempData["UserId"]?.ToString();
+
+            var confirmCode = TempData["ConfirmCode"]?.ToString();
+           
+            if (confirmCode == model.Code && !string.IsNullOrEmpty(userId))
+            {
+                // Находим пользователя по ID
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    // Подтверждаем email
+                    user.EmailConfirmed = true;
+                    await _userManager.UpdateAsync(user);
+
+                    // Автовход после подтверждения
+                    await _signInManager.SignInAsync(user, isPersistent: true);
+
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            // Если код неверный, возвращаем сообщение об ошибке
+            ViewBag.ErrorMessage = "Kehtetu kinnituskood";
+            return View();
+        }
+
+    
+            
 
         private void AddErrors(IdentityResult result)
         { 

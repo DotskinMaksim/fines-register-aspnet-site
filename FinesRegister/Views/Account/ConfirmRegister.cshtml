@@ -1,0 +1,24 @@
+@model ConfirmCodeViewModel
+
+@{
+    ViewData["Title"] = "Registreerimise kinnitus";
+}
+
+<h2>Kinnitage registreerimine</h2>
+
+<form asp-action="ConfirmRegister" method="post">
+    <div class="form-group">
+        <label for="code">Sisestage teie meilile saadetud kinnituskood</label>
+        <input type="text" class="form-control" id="code" name="Code" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kinnita</button>
+</form>
+<a asp-action="SendConfirmationCode" >Saada kood uuesti</a>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
