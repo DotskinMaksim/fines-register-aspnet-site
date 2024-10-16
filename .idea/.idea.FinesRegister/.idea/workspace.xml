@@ -9,18 +9,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afc5e6e-aaf7-4d65-be2f-5461792c3678" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/FinesRegister/Views/Account/ConfirmRegister.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Services/Email/EmailTemplates/ConfirmationCode.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Services/Email/EmailTemplates/ConfirmationLink.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Services/Email/EmailTemplates/FineNotification.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Services/SMS/SmsService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FinesRegister/Services/SMS/SmsTemplates/FineNotification.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FinesRegister/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AccountController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Controllers/HomeController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Data/FinesRegisterContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Data/FinesRegisterContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010094412_Initial.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/20241010110341_UpdateCars.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Migrations/FinesRegisterContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Migrations/FinesRegisterContextModelSnapshot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AccountViewModels.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/EmailService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/EmailService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/AdminViewModels.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Car.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/EmailService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Services/Email/EmailService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/Fine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Models/SmtpSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Services/Email/SmtpSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Models/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Models/User.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FinesRegister/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/AdminOnlyAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/AdminOnlyAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/CVVAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/CVVAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianCarNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/EstonianCarNumberAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianDebitCardAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/EstonianDebitCardAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/EstonianPhoneNumberAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/EstonianPhoneNumberAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Validators/PaymentMethodRequiredAttribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Attributes/PaymentMethodRequiredAttribute.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/CarEdit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineCreate.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/FineEdit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/Views/Admin/Fines.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinesRegister/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FinesRegister/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +58,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -58,21 +78,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.FinesRegister: http.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.FinesRegister: http.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "RiderNuGetOptionsPageId",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.FinesRegister: http">
     <configuration name="FinesRegister: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/FinesRegister/FinesRegister.csproj" />
@@ -131,7 +152,8 @@
       <workItem from="1728861185847" duration="567000" />
       <workItem from="1728924117660" duration="8878000" />
       <workItem from="1729066779185" duration="8409000" />
-      <workItem from="1729075416965" duration="1768000" />
+      <workItem from="1729075416965" duration="2031000" />
+      <workItem from="1729077454088" duration="20866000" />
     </task>
     <task id="LOCAL-00001" summary="Created models and account Controller">
       <option name="closed" value="true" />
@@ -205,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728928926039</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Created registration confirmation">
+      <option name="closed" value="true" />
+      <created>1729077387424</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1729077387425</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +254,7 @@
     <MESSAGE value="Added validations for admin for admin views" />
     <MESSAGE value="Translated the interface to Estonian" />
     <MESSAGE value="Configured Smtp server" />
-    <option name="LAST_COMMIT_MESSAGE" value="Configured Smtp server" />
+    <MESSAGE value="Created registration confirmation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created registration confirmation" />
   </component>
 </project>

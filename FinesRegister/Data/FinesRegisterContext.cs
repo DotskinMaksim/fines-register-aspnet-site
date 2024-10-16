@@ -17,6 +17,7 @@ namespace FinesRegister.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
+
     }
 }
 // INSERT INTO `AspNetUsers` (`Id`, `LastName`, `IsAdmin`, `CreatedAt`, `UserName`, `NormalizedUserName`, `Email`, `NormalizedEmail`, `EmailConfirmed`, `PasswordHash`, `SecurityStamp`, `ConcurrencyStamp`, `PhoneNumber`, `PhoneNumberConfirmed`, `TwoFactorEnabled`, `LockoutEnd`, `LockoutEnabled`, `AccessFailedCount`) VALUES

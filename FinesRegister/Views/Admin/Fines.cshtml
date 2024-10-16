@@ -1,3 +1,4 @@
+@using Twilio.Types
 @model IEnumerable<FinesRegister.Models.Fine>
 
 @{
@@ -55,7 +56,12 @@ ViewBag.Title = "Halda trahvid";
         </td>
         <td>
             @Html.ActionLink("Muuda", "FineEdit", new { id = item.Id }) |
-            @Html.ActionLink("Kustuta", "FineDelete", new { id = item.Id })
+            @Html.ActionLink("Kustuta", "FineDelete", new { id = item.Id }) |
+            @Html.ActionLink("Saada email", "NotifyByEmail", new { id = item.Id })
+            @Html.ActionLink("Saada SMS", "NotifyBySms", new { id = item.Id })
+
+
+
         </td>
     </tr>
     }

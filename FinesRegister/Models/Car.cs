@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using FinesRegister.Validators;
+using FinesRegister.Attributes;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 

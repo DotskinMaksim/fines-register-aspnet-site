@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices.JavaScript;
-using FinesRegister.Validators;
+using FinesRegister.Attributes;
 
 namespace FinesRegister.Models
 {

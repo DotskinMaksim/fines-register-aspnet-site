@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FinesRegister.Validators
+namespace FinesRegister.Attributes
 {
     public class EstonianCVVAttribute : ValidationAttribute
     {

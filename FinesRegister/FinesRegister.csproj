@@ -23,6 +23,9 @@
       </PackageReference>
       <PackageReference Include="MySqlConnector" Version="2.3.7" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+      <PackageReference Include="Twilio" Version="7.5.0" />
+      <PackageReference Include="Twilio.AspNet.Core" Version="8.0.2" />
+      <PackageReference Include="Twilio.AspNet.Mvc" Version="8.0.2" />
     </ItemGroup>
 
 </Project>

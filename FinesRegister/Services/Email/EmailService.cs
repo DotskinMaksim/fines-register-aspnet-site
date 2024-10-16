@@ -1,36 +1,21 @@
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
+using FinesRegister.Models;
+// C1HVXWDE76UWFUPVZ1VTGUZW
 
-namespace FinesRegister.Models
+namespace FinesRegister.Services.Email
 {
     public class EmailService
     {
         private readonly SmtpSettings _smtpSettings;
-        private Dictionary<string, string> messages;
         private Dictionary<string, string> subjects;
 
 
         public EmailService(IOptions<SmtpSettings> smtpSettings)
         {
             _smtpSettings = smtpSettings.Value;
-            messages = new Dictionary<string, string>
-            {
-                {"confirmationLink", $@"
-                <h1>Kinnitage registreerimine</h1>
-                <p>Konto kinnitamiseks klõpsake alloleval nupul:</p>
-                <a href='{{confirmationLink}}' style='display:inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;'>Kinnita konto</a>
-                "},
-                
-                {"confirmationCode", $@"
-                <h1>Kinnitage registreerimine</h1>
-                <p>Teie kinnituskood: <strong>{{confirmationCode}}</strong></p>
-                <p>Sisestage see kood vastavasse väljale veebisaidil, et registreerimine lõpetada.</p>
-                <br>
-                <p>Kui te ei ole registreerimist taotlenud, siis võite selle kirja ignoreerida.</p> 
-                
-                "}
-            };
+           
            
         }
         public string GenerateRandomNumbers(int length)
@@ -52,9 +37,31 @@ namespace FinesRegister.Models
             return code;
         }
 
-        public async Task SendConfirmationEmail(string toEmail, string confirmationElement, string messageKey, string messageSubject)
-        {
-            var messageBody = messages[messageKey].Replace("{"+messageKey+"}", confirmationElement);
+        public async Task SendConfirmationEmail(string toEmail, string messageKey, string messageSubject,
+            string confirmationElement = null, Fine fine = null) {
+            
+            
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Services/Email/EmailTemplates", messageKey+".html");
+
+            string messageBody = await File.ReadAllTextAsync(templatePath);
+
+            switch (messageKey)
+            {
+                case "ConfirmationLink" or "ConfirmationCode":
+                    messageBody = messageBody
+                        .Replace("{" + messageKey + "}", confirmationElement);
+                    break;
+                case "FineNotification":
+                    if (fine == null)
+                    {
+                        throw new ArgumentNullException(nameof(fine), "Fine cannot be null for fine notification");
+                    }
+
+                    messageBody = fine.FormatMessageBody(messageBody);
+                    break;
+
+            }
+
 
             var smtpClient = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
             {
@@ -66,7 +73,7 @@ namespace FinesRegister.Models
             {
                 From = new MailAddress(_smtpSettings.Username),
                 Subject = messageSubject,
-                IsBodyHtml = true, 
+                IsBodyHtml = true,
                 Body = messageBody,
             };
 
@@ -75,6 +82,6 @@ namespace FinesRegister.Models
             await smtpClient.SendMailAsync(mailMessage);
         }
 
-       
+
     }
 }

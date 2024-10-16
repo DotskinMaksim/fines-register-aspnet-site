@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 using FinesRegister.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FinesRegister.Data;
-
+using FinesRegister.Attributes;
+using FinesRegister.Services.Email;
+using FinesRegister.Services.SMS;
 
 namespace FinesRegister.Controllers;
 
@@ -17,12 +20,20 @@ public class AdminController : Controller
 {
     private readonly FinesRegisterContext _dbContext;
     private readonly UserManager<User> _userManager;
+    private readonly EmailService _emailService;
+    private readonly ISmsService _smsService;
 
 
-    public AdminController(FinesRegisterContext dbContext, UserManager<User> userManager)
+
+
+    public AdminController(FinesRegisterContext dbContext, UserManager<User> userManager,
+        EmailService emailService, ISmsService smsService)
     {
         _dbContext = dbContext;
         _userManager = userManager;
+        _emailService = emailService;
+        _smsService = smsService;
+
 
     }
     
@@ -33,12 +44,74 @@ public class AdminController : Controller
         var fines = await _dbContext.Fines.Include(f => f.Car).ToListAsync();
         return View(fines);
     }
+    public async Task<IActionResult> NotifyBySms(int id)
+    {
+        var _fine = await _dbContext.Fines
+            .Include(f => f.Car)
+            .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
+            .FirstOrDefaultAsync(f => f.Id == id);       
+        if (_fine == null)
+        {
+            // Обработка случая, когда штраф не найден
+            throw new Exception("Fine not found");
+        }
+        string phoneNumber = "+372"+_fine.Car.User.PhoneNumber;
+        
+        string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Services/SMS/SmsTemplates/FineNotification.txt");
 
+        string message = await System.IO.File.ReadAllTextAsync(templatePath,Encoding.UTF8);
+        
+        message = _fine.FormatMessageBody(message);
+        
+        await _smsService.SendSmsAsync(phoneNumber, message);
+        return RedirectToAction("Fines", "Admin");
+    }
+
+    public async Task<IActionResult> NotifyByEmail(int id)
+    {
+        
+        var _fine = await _dbContext.Fines
+            .Include(f => f.Car)
+            .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
+            .FirstOrDefaultAsync(f => f.Id == id);       
+        if (_fine == null)
+        {
+            // Обработка случая, когда штраф не найден
+            throw new Exception("Fine not found");
+        }
+
+        string email = _fine.Car?.User?.Email; // Используйте оператор безопасного доступа (?.)
+
+        if (string.IsNullOrEmpty(email))
+        {
+            // Обработка случая, когда адрес электронной почты не найден
+            throw new Exception("Email not found for the user associated with the fine");
+        }
+
+        await _emailService.SendConfirmationEmail(email, "FineNotification", "Trahvi teade", fine: _fine);
+
+
+        
+        return RedirectToAction("Fines", "Admin");
+    }
     
+    public async Task<IActionResult> NotifyFine(int id)
+    {
+        // Отправка уведомления по SMS
+        await NotifyBySms(id);
+    
+        // Отправка уведомления по электронной почте
+        await NotifyByEmail(id);
+    
+        // Перенаправление на страницу со списком штрафов
+        return RedirectToAction("Fines", "Admin");
+    }
+
+
     public async Task<IActionResult> Cars() //CARS
     {
         
-        var cars = await _dbContext.Cars.ToListAsync(); // Получаем список машин
+        var cars = await _dbContext.Cars.Include(c => c.User).ToListAsync(); // Получаем список машин
         return View(cars);
         
            
@@ -227,53 +300,89 @@ public class AdminController : Controller
     }
     
     
-    // GET: /Admin/FineCreate
-    public IActionResult FineCreate() //FINE CREATE
+   // GET: /Admin/FineCreate
+   public async Task<IActionResult> FineCreate()
     {
-        var cars = _dbContext.Cars.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Number
-        }).ToList();
+    // Получаем список автомобилей
+    var cars = await _dbContext.Cars.Select(c => new SelectListItem
+    {
+        Value = c.Id.ToString(),
+        Text = c.Number
+    }).ToListAsync();
 
-        var model = new FineCreateViewModel
-        {
-            Cars = cars
-        };
+    var model = new FineCreateViewModel
+    {
+        Cars = cars,
+    };
 
-        return View(model);
+    return View(model);
     }
 
-    // POST: /Admin/FineCreate
+// POST: /Admin/FineCreate
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> FineCreate(FineCreateViewModel model) //FINE CREATE
+    public async Task<IActionResult> FineCreate(FineCreateViewModel model)
     {
-        if (ModelState.IsValid)
+        // Убедимся, что дата актуальна и корректна
+        if (model.IssueDate == default) // Если дата не задана, устанавливаем её в сегодня
         {
-            var fine = new Fine
-            {
-                IssueDate = model.IssueDate,
-                DueDate = model.IssueDate.AddDays(15),
-                Amount = model.Amount,
-                Reason = model.Reason,
-                CarId = model.CarId
-            };
-
-            _dbContext.Fines.Add(fine);
-            await _dbContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Fines)); // Перенаправление на список штрафов
+            model.IssueDate = DateOnly.FromDateTime(DateTime.Today); // Преобразуем DateTime в DateOnly
         }
 
-        // В случае ошибки, снова получаем список автомобилей
-        model.Cars = _dbContext.Cars.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Number
-        }).ToList();
 
-        return View(model);
+        if (model.CarNumber != null)
+        {
+            try
+            {
+                var car = await _dbContext.Cars
+                    .FirstOrDefaultAsync(c => c.Number == model.CarNumber);
+                if (car == null)
+                {
+                    ViewBag.ErrorMessage = "Auto ei leitud";
+                    return View(model); // Возвращаем модель, чтобы сохранить введенные данные
+                }
+                model.CarId = car.Id;
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = "Auto ei leitud";
+                return View(model); // Возвращаем модель, чтобы сохранить введенные данные
+            }
+        }
+
+        var fine = new Fine
+        {
+            IssueDate = model.IssueDate,
+            DueDate = model.IssueDate.AddDays(15),
+            CarId = model.CarId
+        };
+
+        if (!string.IsNullOrEmpty(model.ViolationType)) // Проверка на пустое значение
+        {
+            switch (model.ViolationType)
+            {
+                case "SpeedExcess":
+                    fine.Reason = $"Kiirusülempiir {model.Excess} km/h";
+                    fine.Amount = model.CalculateFine();
+                    break;
+                case "WrongStay":
+                    fine.Reason = "Peatus vales kohas";
+                    fine.Amount = 100;
+                    break;
+            }
+        }
+
+        // Добавляем штраф в контекст и сохраняем изменения
+        _dbContext.Fines.Add(fine);
+        await _dbContext.SaveChangesAsync();
+
+        // Перенаправление на список штрафов
+        return RedirectToAction("NotifyFine", "Admin", new { id = fine.Id });
+
+
     }
+
 
     // GET: /Admin/FineEdit/5
     public async Task<IActionResult> FineEdit(int id) //FINE EDIT

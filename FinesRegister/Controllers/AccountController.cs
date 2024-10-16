@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FinesRegister.Models;
 using FinesRegister.Data;
+using FinesRegister.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -111,8 +112,8 @@ namespace FinesRegister.Controllers
             
             // Генерация и отправка кода подтверждения
             string confirmCode = _emailService.GenerateRandomNumbers(6);
-            await _emailService.SendConfirmationEmail(email, confirmCode, "confirmationCode",
-                    "Kinnitage registreerimine");
+            await _emailService.SendConfirmationEmail(email,  "ConfirmationCode",
+                    "Kinnitage registreerimine",confirmCode);
 
             // Сохраняем код в TempData для проверки в подтверждении
             TempData["ConfirmCode"] = confirmCode;

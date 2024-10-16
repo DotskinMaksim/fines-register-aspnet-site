@@ -6,31 +6,55 @@ ViewBag.Title = "Lisa trahv";
 
 <h2>Lisa trahv</h2>
 
-<form asp-action="FineCreate">
+<form asp-action="FineCreate" method="post">
     <div class="form-group">
         <label asp-for="IssueDate" class="control-label"></label>
-        <input asp-for="IssueDate" class="form-control" placeholder="Sisestage..." />
+        <input asp-for="IssueDate" class="form-control" type="date" id="IssueDate" />
         <span asp-validation-for="IssueDate" class="text-danger"></span>
+
+        <div>
+            <input type="checkbox" id="useToday" checked onchange="toggleIssueDate()" />
+            <label for="useToday">Tänane päev</label>
+        </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="Amount" class="control-label"></label>
-        <input asp-for="Amount" class="form-control" placeholder="Sisestage..." />
-        <span asp-validation-for="Amount" class="text-danger"></span>
+        <label asp-for="ViolationType" class="control-label">Valige rikkumise tüüp</label>
+        <select asp-for="ViolationType" class="form-control" onchange="showExcessField(this)">
+            <option value="WrongStay">Peatus vales kohas</option>
+            <option value="SpeedExcess">Kiirusülempiir</option>
+        </select>
+        <span asp-validation-for="ViolationType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group" id="excessField" style="display:none;">
+        <label asp-for="Excess" class="control-label"></label>
+        <input asp-for="Excess" class="form-control" placeholder="Sisestage ületamine (km/h)" />
+        <span asp-validation-for="Excess" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Reason" class="control-label"></label>
-        <input asp-for="Reason" class="form-control" placeholder="Sisestage..." />
-        <span asp-validation-for="Reason" class="text-danger"></span>
+        <div>
+            <input type="radio" name="CarOption" value="select" id="selectCar" onclick="toggleCarInput(this)" checked />
+            <label for="selectCar">Valige loendist</label>
+        </div>
+        <div>
+            <input type="radio" name="CarOption" value="manual" id="manualCar" onclick="toggleCarInput(this)" />
+            <label for="manualCar">Sisestage käsitsi</label>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="CarId" class="control-label">Vali auto</label>
+    <div class="form-group" id="carSelectField">
+        <label asp-for="CarId" class="control-label">Valige auto</label>
         <select asp-for="CarId" class="form-control" asp-items="Model.Cars"></select>
         <span asp-validation-for="CarId" class="text-danger"></span>
     </div>
-    <input type="hidden" asp-for="Cars" value=" ">
+
+    <div class="form-group" id="carManualField" style="display:none;">
+        <label asp-for="CarNumber" class="control-label">Sisestage auto number</label>
+        <input type="text" asp-for="CarNumber" class="form-control" placeholder="Sisestage...">
+        <span asp-validation-for="CarNumber" class="text-danger"></span>
+    </div>
 
     <div class="form-group">
         <input type="submit" value="Lisa" class="btn btn-primary" />
@@ -38,3 +62,58 @@ ViewBag.Title = "Lisa trahv";
 </form>
 
 <a asp-action="Fines">Tagasi</a>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+<div class="alert alert-danger">
+    @ViewBag.ErrorMessage
+</div>
+}
+
+@section Scripts {
+<script type="text/javascript">
+    // Устанавливает сегодняшнюю дату по умолчанию и блокирует поле даты, если галочка установлена
+    document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("IssueDate").value = today;
+        toggleIssueDate();
+    });
+
+    // Функция для переключения активности поля даты
+    function toggleIssueDate() {
+        var checkBox = document.getElementById("useToday");
+        var issueDateField = document.getElementById("IssueDate");
+        if (checkBox.checked) {
+            issueDateField.disabled = true; // Блокируем поле
+            var today = new Date().toISOString().split('T')[0];
+            issueDateField.value = today; // Устанавливаем сегодняшнюю дату
+        } else {
+            issueDateField.disabled = false; // Разблокируем поле
+        }
+    }
+
+    // Показывает/скрывает поле для превышения скорости в зависимости от типа нарушения
+    function showExcessField(select) {
+        var excessField = document.getElementById('excessField');
+        if (select.value === 'SpeedExcess') {
+            excessField.style.display = 'block';
+        } else {
+            excessField.style.display = 'none';
+        }
+    }
+
+    // Показывает либо список автомобилей, либо поле для ручного ввода номера
+    function toggleCarInput(radio) {
+        var carSelectField = document.getElementById('carSelectField');
+        var carManualField = document.getElementById('carManualField');
+
+        if (radio.value === 'select') {
+            carSelectField.style.display = 'block';
+            carManualField.style.display = 'none';
+        } else if (radio.value === 'manual') {
+            carSelectField.style.display = 'none';
+            carManualField.style.display = 'block';
+        }
+    }
+</script>
+}

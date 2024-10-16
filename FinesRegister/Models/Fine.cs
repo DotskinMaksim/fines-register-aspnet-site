@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace FinesRegister.Models;
 
@@ -11,12 +12,12 @@ public class Fine
     
     
     [Display(Name = "Saanud")]
-    public DateTime IssueDate { get; set; }
+    public DateOnly IssueDate { get; set; }
     
     
     
     [Display(Name = "Tähtaeg")]
-    public DateTime DueDate { get; set; }
+    public DateOnly DueDate { get; set; }
     
     
     [Display(Name = "Summa")]
@@ -36,6 +37,20 @@ public class Fine
     public int CarId { get; set; }
     
     public Car Car { get; set; }  // Связь с автомобилем
+
+
+    public string FormatMessageBody(string message)
+    {
+        return message
+            .Replace("{fineId}", Id.ToString())
+            .Replace("{issueDate}", IssueDate.ToString())
+            .Replace("{dueDate}", DueDate.ToString())
+            .Replace("{fineReason}", Reason)
+            .Replace("{fineAmount}", Amount.ToString());;
+    }
+    
+    
+    
 
     
 }

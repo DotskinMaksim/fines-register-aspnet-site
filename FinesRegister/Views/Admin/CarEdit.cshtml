@@ -30,7 +30,7 @@ foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
     <div class="form-group">
         <input type="submit" value="Salvesta" class="btn btn-primary" />
     </div>
-    <input type="hidden" asp-for="Users" value=" ">
+    @* <input type="hidden" asp-for="Users" value=" "> *@
 
 </form>
 

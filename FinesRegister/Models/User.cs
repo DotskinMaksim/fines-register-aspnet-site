@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using FinesRegister.Validators;
+using FinesRegister.Attributes;
 using System.Security.Cryptography;
 using System.Text;
 
 
 using Microsoft.AspNetCore.Identity;
 
-//FineRegister fnuf hkki arjx lqwm
 namespace FinesRegister.Models;
 
 public class User : IdentityUser

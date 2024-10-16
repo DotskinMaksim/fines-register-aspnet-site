@@ -1,0 +1,12 @@
+Teade trahvi kohta
+
+Teie trahvi number: {fineId}
+Rikkumise kuupäev: {issueDate}
+Trahvi põhjus: {fineReason}
+Trahvi suurus: {fineAmount} eurot
+Palun makske trahv hiljemalt {dueDate}, et vältida täiendavaid karistusi.
+Kui teil on küsimusi, võtke meiega ühendust.
+Kui te ei ole selle trahvi saanud, palun ignoreerige seda teadet.
+
+Tänan teid,
+Teie Teenus

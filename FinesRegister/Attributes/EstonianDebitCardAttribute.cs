@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace FinesRegister.Validators
+namespace FinesRegister.Attributes
 {
     public class EstonianDebitCardAttribute : ValidationAttribute
     {

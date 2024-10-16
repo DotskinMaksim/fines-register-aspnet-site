@@ -1,5 +1,7 @@
 using FinesRegister.Data;
 using FinesRegister.Models;
+using FinesRegister.Services.Email;
+using FinesRegister.Services.SMS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,8 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpS
 
 // Регистрация EmailService
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddSingleton<ISmsService, SmsService>();
+
 
 builder.Services.AddDbContextPool<FinesRegisterContext>(options => 
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));

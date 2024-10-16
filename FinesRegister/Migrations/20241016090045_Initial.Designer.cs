@@ -4,6 +4,7 @@ using FinesRegister.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinesRegister.Migrations
 {
     [DbContext(typeof(FinesRegisterContext))]
-    partial class FinesRegisterContextModelSnapshot : ModelSnapshot
+    [Migration("20241016090045_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,7 @@ namespace FinesRegister.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("FinesRegister.Models.Fine", b =>
@@ -76,7 +79,7 @@ namespace FinesRegister.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Fines", (string)null);
+                    b.ToTable("Fines");
                 });
 
             modelBuilder.Entity("FinesRegister.Models.PaymentMethod", b =>
@@ -111,7 +114,7 @@ namespace FinesRegister.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PaymentMethods", (string)null);
+                    b.ToTable("PaymentMethods");
                 });
 
             modelBuilder.Entity("FinesRegister.Models.User", b =>
