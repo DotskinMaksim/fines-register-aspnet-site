@@ -1,16 +1,27 @@
 @model IEnumerable<FinesRegister.Models.Fine>
 
 @{
-ViewBag.Title = "Minu rahvid";
+ViewData["Title"] = "Minu trahvid";
 }
+<div>
 
 <h2>Minu trahvid</h2>
 
-
+@if (Model != null && Model.Any())
+{
+<!-- Выпадающий список для фильтрации -->
+<div class="form-group">
+    <select id="statusFilter" class="form-control" onchange="filterFines()">
+        <option value="All">Kõik</option>
+        <option value="Paid">Tasulised</option>
+        <option value="NotPaid">Mitte tasulised</option>
+    </select>
+</div>
+<br>
 <div class="ticket-container">
     @foreach (var item in Model)
     {
-    <div class="ticket">
+    <div class="ticket" data-id="@item.Id" data-status="@item.IsPaid" onclick="toggleSelection(this)">
         <div class="ticket-header">
             <span class="ticket-date"> @Html.DisplayNameFor(model => model.First().IssueDate): @item.IssueDate.ToString("dd.MM.yyyy")</span>
             <span class="ticket-number">@Html.DisplayNameFor(model => model.First().Car.Number): @item.Car.Number</span>
@@ -19,8 +30,99 @@ ViewBag.Title = "Minu rahvid";
             <p>@Html.DisplayNameFor(model => model.First().Amount): <strong>@item.Amount €</strong></p>
             <p>@Html.DisplayNameFor(model => model.First().Reason): @item.Reason</p>
             <p>@Html.DisplayNameFor(model => model.First().DueDate): @item.DueDate.ToString("dd.MM.yyyy")</p>
-            <p>@Html.DisplayNameFor(model => model.First().IssueDate): <strong>@(item.IsPaid ? "Tasuline" : "Mitte tasuline")</strong></p>
+            <p>@Html.DisplayNameFor(model => model.First().IsPaid): <strong>@(item.IsPaid ? "Tasuline" : "Mitte tasuline")</strong></p>
         </div>
     </div>
     }
 </div>
+
+<!-- Кнопки для оплаты выбранных штрафов -->
+<button class="btn btn-success" onclick="paySelectedFines()">Maksa valitud trahvid</button>
+}
+else
+{
+<p>Trahve ei leitud.</p>
+}
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+    var selectedFines = [];
+
+    // Функция для выбора/отмены выбора штрафов
+    function toggleSelection(ticket) {
+        var id = ticket.getAttribute('data-id');
+        var isPaid = ticket.getAttribute("data-status") === "True";
+
+        if (!isPaid) {
+            if (selectedFines.includes(id)) {
+                selectedFines = selectedFines.filter(fineId => fineId !== id);
+                ticket.classList.remove('selected');
+            } else {
+                selectedFines.push(id);
+                ticket.classList.add('selected');
+            }
+        }
+    }
+
+    // Функция для оплаты выбранных штрафов
+    function paySelectedFines() {
+        var fineIds = JSON.stringify(selectedFines);
+
+        if (selectedFines.length === 0) {
+            alert("Palun vali vähemalt üks trahv.");
+            return;
+        }
+
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/Account/PayFines';
+
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'fineIds';
+        input.value = fineIds;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    // Функция для фильтрации штрафов по статусу
+    function filterFines() {
+        var filter = document.getElementById("statusFilter").value;
+        var tickets = document.querySelectorAll(".ticket");
+
+        tickets.forEach(function (ticket) {
+            var isPaid = ticket.getAttribute("data-status") === "True";
+
+            if (filter === "Paid" && !isPaid) {
+                ticket.style.display = "none";
+            } else if (filter === "NotPaid" && isPaid) {
+                ticket.style.display = "none";
+            } else {
+                ticket.style.display = "block";
+            }
+        });
+    }
+</script>
+
+<style>
+    .ticket {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px 0;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out; /* Плавный переход для увеличения */
+    }
+
+    /* Эффект увеличения при наведении */
+    .ticket:not([data-status="True"]):hover {
+        transform: scale(1.05); /* Увеличиваем на 5% */
+    }
+
+    .ticket.selected {
+        background-color: #dff0d8; /* Зеленый цвет для выделенных */
+    }
+</style>
+}

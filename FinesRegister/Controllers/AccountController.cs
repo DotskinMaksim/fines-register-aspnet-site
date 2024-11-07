@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 
 namespace FinesRegister.Controllers
@@ -47,40 +49,98 @@ namespace FinesRegister.Controllers
 
             return View(fines); // Возвращаем только штрафы, относящиеся к текущему пользователю
         }
+        
+        
+       
+        
+        [Authorize]
+        [HttpPost]
+        public IActionResult PayFines(string fineIds)
+        {
+            // Десериализация идентификаторов штрафов из JSON
+            var fineIdsList = JsonConvert.DeserializeObject<List<int>>(fineIds);
 
+            // Получаем все штрафы с указанными идентификаторами
+            var fines = _dbContext.Fines
+                .Where(f => fineIdsList.Contains(f.Id) && !f.IsPaid)
+                .ToList();
+
+            var totalAmount = fines.Sum(f => f.Amount);
+
+            var model = new PaymentViewModel
+            {
+                Fines = fines,
+                TotalAmount = totalAmount,
+                PaymentMethods = _dbContext.PaymentMethods
+                    .Where(p => p.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .ToList() // Получение списка методов оплаты
+            };
+
+            return View("PayFines", model);
+        }
+        
+        // Завершение платежа и отметка штрафов как оплаченных
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CompletePayment(string fineIds)
+        {
+            
+            var fineIdsList = JsonConvert.DeserializeObject<List<int>>(fineIds);
+
+            var fines = _dbContext.Fines
+                .Where(f => fineIdsList.Contains(f.Id) && !f.IsPaid)
+                .ToList();
+            
+            fines.ForEach(f => f.IsPaid = true);
+            foreach (var fine in fines)
+            {
+                _dbContext.Update(fine);
+                await _dbContext.SaveChangesAsync();
+            }
+            await Task.Delay(3000); 
+            return RedirectToAction("PaymentSuccessful");
+        }
+
+        public IActionResult PaymentSuccessful()
+        {
+            return View();
+        }
+       
 
         public IActionResult AccessDenied()
         {
             return View();
         }
-
-        public IActionResult PaymentMethodAdd()
+        public IActionResult AddPaymentMethod()
         {
             return View();
         }
-
+        
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PaymentMethodAdd(PaymentMethodAddViewModel model)
+        public async Task<IActionResult> AddPaymentMethod(AddPaymentMethodViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Получаем ID текущего пользователя
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 var paymentMethod = new PaymentMethod
                 {
                     OwnerName = model.OwnerName,
                     CardNumber = model.CardNumber,
-                    ExpirationDate = model.ExpirationMonth + "/" + model.ExpirationYear,
-                    CvvCode = model.CvvCode,
+                    ExpirationDate = $"{model.ExpirationMonth}/{model.ExpirationYear}",
+                    CvvCode = model.CvvCode.ToString(),
                     UserId = userId
                 };
 
                 await _dbContext.PaymentMethods.AddAsync(paymentMethod);
                 await _dbContext.SaveChangesAsync();
-                return RedirectToAction("Index", "Home"); // Перенаправление на главную страницу после добавления
+
+                return RedirectToAction("Fines");
             }
 
-            return View(model);
+            return View("AddPaymentMethod", model);
         }
 
 
@@ -169,24 +229,30 @@ namespace FinesRegister.Controllers
                     lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Kasutaja {Email} logis edukalt sisse.", model.Email);
+                    var loginLog = new LoginLog
+                    {
+                        UserId = user.Id,
+                        LoginTime = DateTime.UtcNow
+                    };
+                    _dbContext.LoginLogs.Add(loginLog);
+                    _dbContext.SaveChanges();
+                    _logger.LogInformation("Kasutaja {Email} logis edukalt sisse", model.Email);
                     return RedirectToAction("Index", "Home");
                 }
-                else if (result.IsLockedOut)
+                if (result.IsLockedOut)
                 {
                     _logger.LogWarning(
-                        "Kasutaja {Email} lukustatakse pärast liiga palju ebaõnnestunud sisselogimiskatseid.",
+                        "Kasutaja {Email} lukustatakse pärast liiga palju ebaõnnestunud sisselogimiskatseid",
                         model.Email);
                     ModelState.AddModelError(string.Empty,
-                        "Kasutaja lukustati pärast liiga palju ebaõnnestunud sisselogimiskatseid.");
+                        "Kasutaja lukustati pärast liiga palju ebaõnnestunud sisselogimiskatseid");
                     return View(model);
                 }
-                else
-                {
+               
                     _logger.LogWarning("Kehtetu parool kasutajale: {Email}", model.Email);
-                    ModelState.AddModelError(string.Empty, "Vale e-posti aadress või parool.");
+                    ModelState.AddModelError(string.Empty, "Vale e-posti aadress või parool");
                     return View(model);
-                }
+                
             }
 
             return View(model);
@@ -256,6 +322,7 @@ namespace FinesRegister.Controllers
                     // return RedirectToAction("ConfirmRegister");
                     TempData["UserId"] = user.Id;
                     TempData["Email"] = user.Email;
+                    
                     return await SendConfirmationCode();
                 }
 

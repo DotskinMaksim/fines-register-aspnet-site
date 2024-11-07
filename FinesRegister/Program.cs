@@ -5,6 +5,7 @@ using FinesRegister.Services.SMS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -35,12 +36,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<FinesRegisterContext>();
 
     // Создание базы данных, если она ещё не создана
+    
     context.Database.EnsureCreated();
 }
 

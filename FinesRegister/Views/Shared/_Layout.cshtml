@@ -22,32 +22,40 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Kodu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Fines">Minu trahvid</a>
-                    </li>
-                </ul>
-            </div>
 
-
-            <ul class="navbar-nav flex-grow-1">
                 @if (User.Identity.IsAuthenticated)
                 {
-                var currentUser = await _userManager.GetUserAsync(User);
-                if (currentUser != null && currentUser.IsAdmin == true)
-                {
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Fines">Trahvid</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Cars">Autod</a>
-                </li>
-                }
-                }
-            </ul>
+                    var currentUser = await _userManager.GetUserAsync(User);
+                    if (currentUser != null && currentUser.IsAdmin)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Fines">Trahvid</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Cars">Autod</a>
+                        </li>
+                    }
+                    else
+                    {
 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Fines">Minu trahvid</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="FAQ">Abi</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="FAQ">Abi</a>
+                        </li>
+                }
+                </ul>
+
+            </div>
+            
 
 
         </div>
@@ -63,7 +71,7 @@
                     {
 
                         <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Logi sisse</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Registreeri</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Registreeru</a></li>
                     }
                 </ul>
             </div>

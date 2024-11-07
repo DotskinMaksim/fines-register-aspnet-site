@@ -4,7 +4,12 @@
 @{
 ViewBag.Title = "Halda trahvid";
 }
-
+@if (TempData["AlertMessage"] != null)
+{
+<script>
+    alert('@Html.Raw(TempData["AlertMessage"])');
+</script>
+}
 <h2>Trahvid</h2>
 
 <p>
@@ -30,7 +35,8 @@ ViewBag.Title = "Halda trahvid";
         <th>
             @Html.DisplayNameFor(model => model.First().Car.Number)
         </th>
-        <th></th>
+        <th>Tegevused</th>
+        <th>Teatama</th>
     </tr>
 
     @foreach (var item in Model)
@@ -56,9 +62,12 @@ ViewBag.Title = "Halda trahvid";
         </td>
         <td>
             @Html.ActionLink("Muuda", "FineEdit", new { id = item.Id }) |
-            @Html.ActionLink("Kustuta", "FineDelete", new { id = item.Id }) |
-            @Html.ActionLink("Saada email", "NotifyByEmail", new { id = item.Id })
-            @Html.ActionLink("Saada SMS", "NotifyBySms", new { id = item.Id })
+            @Html.ActionLink("Kustuta", "FineDelete", new { id = item.Id })
+        </td>
+        <td>
+
+        @Html.ActionLink("Saada email", "NotifyByEmail", new { id = item.Id }) |
+        @Html.ActionLink("Saada SMS", "NotifyBySms", new { id = item.Id })
 
 
 

@@ -8,6 +8,8 @@ namespace FinesRegister.Models;
 
 public class Fine
 {
+    
+    [Display(Name = "Number")]
     public int Id { get; set; }
     
     

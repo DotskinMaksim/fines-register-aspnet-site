@@ -1,0 +1,136 @@
+@model FinesRegister.Models.PaymentViewModel
+
+@{
+ViewBag.Title = "Makske trahve";
+}
+
+<div class="container mt-4">
+    <h2>Makske trahve</h2>
+
+    <!-- Динамическая сумма -->
+    <p><span id="totalAmount" class="font-weight-bold" style="font-size: 1.5rem;">Kokku maksmiseks: @Model.TotalAmount €</span></p>
+
+    <h4>Teie trahvid:</h4>
+    <ul class="list-unstyled">
+        @foreach (var fine in Model.Fines)
+        {
+        <li class="cart-item border rounded p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>@fine.Reason - @fine.Amount €</span>
+                <input type="checkbox" class="fineCheckbox" data-id="@fine.Id" data-amount="@fine.Amount" onchange="toggleSelection(this)" />
+                <span class="font-weight-bold">Valige</span>
+            </div>
+        </li>
+        }
+    </ul>
+
+    <h4>Valige maksemeetod:</h4>
+    <div class="form-group">
+        @if (Model.PaymentMethods.Any())
+        {
+        <select asp-for="SelectedPaymentMethodId" class="form-control">
+            @foreach (var method in Model.PaymentMethods)
+            {
+            <option value="@method.Id">@method.OwnerName - **** **** **** @(method.CardNumber.Substring(method.CardNumber.Length - 4))</option>
+            }
+        </select>
+        }
+        else
+        {
+        <p>Teil ei ole salvestatud maksemeetodeid.</p>
+        }
+    </div>
+
+    <a asp-action="AddPaymentMethod" class="btn btn-link">Lisage uus maksemeetod</a>
+
+    <div class="form-group mt-3">
+        @if (Model.PaymentMethods.Any())
+        {
+        <button class="btn btn-success" onclick="completePayment()">Maksa</button>
+        }
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Tagasi</a>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+    }
+
+    .cart-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .cart-item:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .font-weight-bold {
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    // Массив для хранения выбранных штрафов
+    var selectedFines = [];
+    var totalAmount = @Model.TotalAmount; // Изначальная сумма
+
+    // Функция для обновления суммы
+    function updateTotalAmount() {
+        var selectedTotal = selectedFines.reduce(function (sum, fineId) {
+            var fine = document.querySelector(`input[data-id="${fineId}"]`);
+            return sum + parseFloat(fine.getAttribute('data-amount'));
+        }, 0);
+
+        // Обновляем отображаемую сумму
+        var totalDisplay = document.getElementById("totalAmount");
+        totalDisplay.innerText = "Kokku maksmiseks: " + selectedTotal.toFixed(2) + " €";
+    }
+
+    function toggleSelection(checkbox) {
+        var fineId = checkbox.getAttribute('data-id');
+        var fineAmount = parseFloat(checkbox.getAttribute('data-amount'));
+
+        if (checkbox.checked) {
+            // Добавляем штраф в массив, если флажок выбран
+            selectedFines.push(fineId);
+        } else {
+            // Удаляем штраф из массива, если флажок не выбран
+            selectedFines = selectedFines.filter(fine => fine !== fineId);
+        }
+
+        updateTotalAmount(); // Обновляем общую сумму
+    }
+
+    // Изначально обновляем сумму для отображения
+    updateTotalAmount();
+
+    // Функция отправки данных о выбранных штрафах
+    function completePayment() {
+        if (selectedFines.length === 0) {
+            alert("Palun vali vähemalt üks trahv.");
+            return;
+        }
+
+        // Отправка данных на сервер
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/Account/CompletePayment'; // Ваш маршрут
+
+        // Добавляем скрытое поле для передачи идентификаторов штрафов
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'fineIds';
+        input.value = JSON.stringify(selectedFines);
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>

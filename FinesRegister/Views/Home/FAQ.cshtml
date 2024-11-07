@@ -1,0 +1,71 @@
+@model IEnumerable<FinesRegister.Models.Question>
+
+@{
+ViewBag.Title = "Korduma kippuvad küsimused";
+}
+<div>
+
+<h2>Korduma kippuvad küsimused</h2>
+
+<div class="faq-section">
+    @foreach (var question in Model)
+    {
+    <div class="faq-item">
+        <button class="faq-question">@question.Text</button>
+        <div class="faq-answer">
+            <p>@question.Answer</p>
+        </div>
+    </div>
+    }
+</div>
+
+<style>
+    h2{
+        margin-left: 158px;
+    }
+    .faq-section {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .faq-item {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    .faq-question {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px 0;
+        cursor: pointer;
+        outline: none;
+    }
+    .faq-answer {
+        display: none;
+        font-size: 16px;
+        padding: 5px 0 0;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const questions = document.querySelectorAll(".faq-question");
+
+        questions.forEach(question => {
+            question.addEventListener("click", function() {
+                const answer = this.nextElementSibling;
+
+                // Скрыть все ответы, кроме выбранного
+                document.querySelectorAll(".faq-answer").forEach(a => {
+                    if (a !== answer) a.style.display = "none";
+                });
+
+                // Переключить отображение ответа на выбранный вопрос
+                answer.style.display = answer.style.display === "block" ? "none" : "block";
+            });
+        });
+    });
+</script>
+</div>

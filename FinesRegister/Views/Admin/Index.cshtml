@@ -1,0 +1,21 @@
+@model IEnumerable<FinesRegister.Models.LoginLog>
+
+<h2>Kasutajate sisselogimise logid</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Kasutaja</th>
+        <th>Sisselogimise aeg</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var log in Model)
+    {
+    <tr>
+        <td>@log.UserId</td>
+        <td>@log.LoginTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
+    </tr>
+    }
+    </tbody>
+</table>

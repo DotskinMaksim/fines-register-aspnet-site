@@ -15,6 +15,12 @@ namespace FinesRegister.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Fine> Fines { get; set; }
         public DbSet<Car> Cars { get; set; }
+        
+        public DbSet<Question> Questions { get; set; }
+        
+        public DbSet<LoginLog> LoginLogs { get; set; }
+
+
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
 

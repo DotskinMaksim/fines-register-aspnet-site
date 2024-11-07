@@ -6,34 +6,34 @@ using FinesRegister.Attributes;
 namespace FinesRegister.Models
 {
 
-    public class PaymentMethodAddViewModel
+    public class PaymentViewModel
     {
-        
-        [Required(ErrorMessage = "Omaniku nimi on nõutav")]
-        [Display(Name ="Omaniku nimi")]
-        public string OwnerName { get; set; } 
-        
-    
-        [Required(ErrorMessage = "Kardi number on nõutav")]
-        [Display(Name ="Kardi number")]
-        [EstonianDebitCard]
-        public string CardNumber{ get; set; } 
-        
-        
-        
-        [Required(ErrorMessage = "Kuu on nõutav")]
-        public string ExpirationMonth { get; set; }
-        
-        
-        [Required(ErrorMessage = "Asta on nõutav")]
-        public string ExpirationYear { get; set; }
+        public List<Fine> Fines { get; set; }
+        public List<PaymentMethod> PaymentMethods { get; set; }
+        public int SelectedPaymentMethodId { get; set; }
+        public float TotalAmount { get; set; }
+    }
 
-        
+    public class AddPaymentMethodViewModel
+    {
+        [Required(ErrorMessage = "Kaardi omaniku nimi on kohustuslik")]
+        public string OwnerName { get; set; }
 
-        [Required(ErrorMessage = "CVV kood on nõutav")]
-        [Display(Name ="CVV kood")]
-        [EstonianCVV]
-        public string CvvCode{ get; set; } 
+        [Required(ErrorMessage = "Kaardi number on kohustuslik")]
+        [CreditCard(ErrorMessage = "Sisestage kehtiv kaardi number")]
+        public string CardNumber { get; set; }
+
+        [Required(ErrorMessage = "Aegumiskuupäeva kuu on kohustuslik")]
+        [Range(1, 12, ErrorMessage = "Sisestage kehtiv kuu")]
+        public int ExpirationMonth { get; set; }
+
+        [Required(ErrorMessage = "Aegumiskuupäeva aasta on kohustuslik")]
+        [Range(2023, 2100, ErrorMessage = "Sisestage kehtiv aasta")]
+        public int ExpirationYear { get; set; }
+
+        [Required(ErrorMessage = "CVV on kohustuslik")]
+        [Range(100, 999, ErrorMessage = "CVV peab olema kolmekohaline")]
+        public int CvvCode { get; set; }
     }
     
     public class RegisterViewModel

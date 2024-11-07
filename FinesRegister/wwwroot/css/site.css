@@ -37,8 +37,12 @@ body {
   position: relative;
   overflow: hidden;
   font-family: Arial, sans-serif;
+  cursor: pointer;
 }
-
+.ticket.selected {
+  border-color: #28a745; /* Цвет границы при выделении */
+  background-color: #e2f0e6; /* Цвет фона при выделении */
+}
 .ticket-header {
   display: flex;
   justify-content: space-between;

@@ -22,9 +22,7 @@ public class AdminController : Controller
     private readonly UserManager<User> _userManager;
     private readonly EmailService _emailService;
     private readonly ISmsService _smsService;
-
-
-
+    
 
     public AdminController(FinesRegisterContext dbContext, UserManager<User> userManager,
         EmailService emailService, ISmsService smsService)
@@ -33,12 +31,19 @@ public class AdminController : Controller
         _userManager = userManager;
         _emailService = emailService;
         _smsService = smsService;
-
-
+        
     }
-    
-    
-    
+
+    public async Task<IActionResult> Index()
+    {
+        var logs = await _dbContext.LoginLogs
+            .Include(log => log.User)
+            .OrderByDescending(log => log.LoginTime)
+            .ToListAsync();
+
+        return View(logs);  
+    }
+
     public async Task<IActionResult> Fines() 
     {
         var fines = await _dbContext.Fines.Include(f => f.Car).ToListAsync();
@@ -49,10 +54,15 @@ public class AdminController : Controller
         var _fine = await _dbContext.Fines
             .Include(f => f.Car)
             .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
-            .FirstOrDefaultAsync(f => f.Id == id);       
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        if (_fine.Car.User.Id == "not defined")
+        {
+            TempData["AlertMessage"] = "Sõiduki kasutaja ei ole registreeritud";
+            return RedirectToAction("Fines", "Admin");
+        }
         if (_fine == null)
         {
-            // Обработка случая, когда штраф не найден
             throw new Exception("Fine not found");
         }
         string phoneNumber = "+372"+_fine.Car.User.PhoneNumber;
@@ -73,7 +83,13 @@ public class AdminController : Controller
         var _fine = await _dbContext.Fines
             .Include(f => f.Car)
             .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
-            .FirstOrDefaultAsync(f => f.Id == id);       
+            .FirstOrDefaultAsync(f => f.Id == id);   
+        
+        if (_fine.Car.User.Id == "not defined")
+        {
+            TempData["AlertMessage"] = "Sõiduki kasutaja ei ole registreeritud";
+            return RedirectToAction("Fines", "Admin");
+        }
         if (_fine == null)
         {
             // Обработка случая, когда штраф не найден
@@ -449,9 +465,5 @@ public class AdminController : Controller
 
         return View(model);
     }
-
     
-   
-
-
 }
