@@ -77,18 +77,15 @@ ViewBag.Title = "Makske trahve";
 </style>
 
 <script>
-    // Массив для хранения выбранных штрафов
     var selectedFines = [];
-    var totalAmount = @Model.TotalAmount; // Изначальная сумма
+    var totalAmount = @Model.TotalAmount;
 
-    // Функция для обновления суммы
     function updateTotalAmount() {
         var selectedTotal = selectedFines.reduce(function (sum, fineId) {
             var fine = document.querySelector(`input[data-id="${fineId}"]`);
             return sum + parseFloat(fine.getAttribute('data-amount'));
         }, 0);
 
-        // Обновляем отображаемую сумму
         var totalDisplay = document.getElementById("totalAmount");
         totalDisplay.innerText = "Kokku maksmiseks: " + selectedTotal.toFixed(2) + " €";
     }
@@ -98,32 +95,26 @@ ViewBag.Title = "Makske trahve";
         var fineAmount = parseFloat(checkbox.getAttribute('data-amount'));
 
         if (checkbox.checked) {
-            // Добавляем штраф в массив, если флажок выбран
             selectedFines.push(fineId);
         } else {
-            // Удаляем штраф из массива, если флажок не выбран
             selectedFines = selectedFines.filter(fine => fine !== fineId);
         }
 
-        updateTotalAmount(); // Обновляем общую сумму
+        updateTotalAmount();
     }
 
-    // Изначально обновляем сумму для отображения
     updateTotalAmount();
 
-    // Функция отправки данных о выбранных штрафах
     function completePayment() {
         if (selectedFines.length === 0) {
             alert("Palun vali vähemalt üks trahv.");
             return;
         }
 
-        // Отправка данных на сервер
         var form = document.createElement('form');
         form.method = 'post';
-        form.action = '/Account/CompletePayment'; // Ваш маршрут
+        form.action = '/Account/CompletePayment'; 
 
-        // Добавляем скрытое поле для передачи идентификаторов штрафов
         var input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'fineIds';

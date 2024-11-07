@@ -72,27 +72,24 @@ ViewBag.Title = "Lisa trahv";
 
 @section Scripts {
 <script type="text/javascript">
-    // Устанавливает сегодняшнюю дату по умолчанию и блокирует поле даты, если галочка установлена
     document.addEventListener("DOMContentLoaded", function () {
         var today = new Date().toISOString().split('T')[0];
         document.getElementById("IssueDate").value = today;
         toggleIssueDate();
     });
 
-    // Функция для переключения активности поля даты
     function toggleIssueDate() {
         var checkBox = document.getElementById("useToday");
         var issueDateField = document.getElementById("IssueDate");
         if (checkBox.checked) {
-            issueDateField.disabled = true; // Блокируем поле
+            issueDateField.disabled = true; 
             var today = new Date().toISOString().split('T')[0];
-            issueDateField.value = today; // Устанавливаем сегодняшнюю дату
+            issueDateField.value = today; 
         } else {
-            issueDateField.disabled = false; // Разблокируем поле
+            issueDateField.disabled = false; 
         }
     }
 
-    // Показывает/скрывает поле для превышения скорости в зависимости от типа нарушения
     function showExcessField(select) {
         var excessField = document.getElementById('excessField');
         if (select.value === 'SpeedExcess') {
@@ -102,7 +99,6 @@ ViewBag.Title = "Lisa trahv";
         }
     }
 
-    // Показывает либо список автомобилей, либо поле для ручного ввода номера
     function toggleCarInput(radio) {
         var carSelectField = document.getElementById('carSelectField');
         var carManualField = document.getElementById('carManualField');

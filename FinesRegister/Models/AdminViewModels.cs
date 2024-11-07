@@ -76,7 +76,7 @@ namespace FinesRegister.Models
         public int CarId { get; set; }
 
         
-        public IEnumerable<SelectListItem>? Cars { get; set; } // Добавьте это свойство
+        public IEnumerable<SelectListItem>? Cars { get; set; } 
 
     }
 

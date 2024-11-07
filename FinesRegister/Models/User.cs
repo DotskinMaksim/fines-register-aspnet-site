@@ -20,7 +20,7 @@ public class User : IdentityUser
     
     public ICollection<Car> Cars { get; set; } 
     
-    public ICollection<PaymentMethod> PaymentMethods { get; set; }  // Связь с методами оплаты
+    public ICollection<PaymentMethod> PaymentMethods { get; set; }  
     
     
     

@@ -53,8 +53,7 @@ namespace FinesRegister.Services.Email
             switch (messageKey)
             {
                 case "ConfirmationLink" or "ConfirmationCode":
-                    messageBody = messageBody
-                        .Replace("{" + messageKey + "}", confirmationElement);
+                    messageBody = messageBody.Replace("{{confirmationCode}}", confirmationElement);
                     break;
                 case "FineNotification":
                     if (fine == null)

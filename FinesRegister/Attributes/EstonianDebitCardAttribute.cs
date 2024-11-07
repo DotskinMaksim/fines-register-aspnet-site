@@ -14,20 +14,17 @@ namespace FinesRegister.Attributes
                 return new ValidationResult("Kaardi number on nõutav.");
             }
 
-            // Эстонские дебетовые карты обычно содержат 16 цифр
             if (cardNumber.Length != 16)
             {
                 return new ValidationResult("Kaardi number peab olema 16 numbrit.");
             }
 
-            // Проверка, что номер карты состоит только из цифр
             if (!cardNumber.All(char.IsDigit))
             {
                 return new ValidationResult("Kaardi number peab sisaldama ainult numbreid.");
             }
 
-            // Дополнительная проверка для эстонских банков (например, карты начинаются с 5100 или 5300)
-            string[] validPrefixes = { "5100", "5300", "5167" }; // Пример для MasterCard
+            string[] validPrefixes = { "5100", "5300", "5167" }; 
             bool isValidPrefix = validPrefixes.Any(prefix => cardNumber.StartsWith(prefix));
 
             if (!isValidPrefix)
@@ -35,7 +32,6 @@ namespace FinesRegister.Attributes
                 return new ValidationResult("Kaardi number ei ole kehtiv.");
             }
 
-            // Дополнительная проверка с использованием алгоритма Луна (Luhn) для валидации
             if (!IsValidLuhn(cardNumber))
             {
                 return new ValidationResult("Kaardi number on kehtetu.");
@@ -44,7 +40,6 @@ namespace FinesRegister.Attributes
             return ValidationResult.Success;
         }
 
-        // Реализация алгоритма Луна для проверки корректности номера карты
         private bool IsValidLuhn(string cardNumber)
         {
             int sum = 0;

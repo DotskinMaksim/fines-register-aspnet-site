@@ -19,7 +19,6 @@ ViewData["Title"] = "Koduleht";
         <span>Trahvid - @Model.First().Car.Number</span>
         <br>
 
-        <!-- Выпадающий список для фильтрации -->
     <div class="form-group">
         <select id="statusFilter" class="form-control" onchange="filterFines()">
             <option value="All">Kõik</option>
@@ -49,7 +48,6 @@ ViewData["Title"] = "Koduleht";
 
         @if (User.Identity.IsAuthenticated && Model.First().Car.UserId == ViewBag.UserId)
         {
-        <!-- Кнопки для оплаты или сохранения выбранных штрафов -->
         <button class="btn btn-success" onclick="paySelectedFines()">Maksa valitud trahvid</button>
         }
         @if (!User.Identity.IsAuthenticated)
@@ -71,7 +69,6 @@ ViewData["Title"] = "Koduleht";
     <script type="text/javascript">
     var selectedFines = [];
 
-    // Функция для выбора/отмены выбора штрафов
     function toggleSelection(ticket) {
         var id = ticket.getAttribute('data-id');
         var isPaid = ticket.getAttribute("data-status") === "True";
@@ -92,12 +89,10 @@ ViewData["Title"] = "Koduleht";
             return;
         }
 
-        // Отправка данных на сервер
         var form = document.createElement('form');
         form.method = 'post';
         form.action = '/Account/PayFines'; // Ваш маршрут
 
-        // Добавляем скрытое поле для передачи идентификаторов штрафов
         var input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'fineIds';
@@ -109,7 +104,6 @@ ViewData["Title"] = "Koduleht";
     }
 
 
-    // Функция для фильтрации штрафов по статусу
     function filterFines() {
         var filter = document.getElementById("statusFilter").value;
         var tickets = document.querySelectorAll(".ticket");
@@ -134,16 +128,15 @@ ViewData["Title"] = "Koduleht";
             padding: 10px;
             margin: 10px 0;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out; /* Плавный переход для увеличения */
+            transition: transform 0.3s ease-in-out; 
         }
         .ticket-id {
             font-weight: bold;
             color: #333;
             margin-right: 15px;
         }
-        /* Эффект увеличения при наведении */
         .ticket:not([data-status="True"]):hover {
-            transform: scale(1.05); /* Увеличиваем на 5% */
+            transform: scale(1.05); 
         }
 
         .ticket.selected {

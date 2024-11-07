@@ -24,12 +24,11 @@ public class PaymentMethod
     public string CvvCode{ get; set; } 
     
     
-    // [Display(Name ="Konto või kaardi number")]
-    // public string AccountNumber { get; set; }  = null;
+   
     
     
 
     [ForeignKey("User")]
-    public string UserId { get; set; }  // Связь с пользователем
-    public User User { get; set; }  // Связь с моделью пользователя (предполагается, что у вас есть модель пользователя)
+    public string UserId { get; set; }  
+    public User User { get; set; } 
 }

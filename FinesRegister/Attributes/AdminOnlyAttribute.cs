@@ -12,15 +12,12 @@ namespace FinesRegister.Attributes
     {
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            // Получаем сервис UserManager через DI
             var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<User>>();
 
-            // Получаем текущего пользователя
             var currentUser = await userManager.GetUserAsync(context.HttpContext.User);
 
             if (currentUser == null || !currentUser.IsAdmin)
             {
-                // Если пользователь не администратор, перенаправляем на страницу "Доступ запрещен"
                 context.Result = new RedirectToActionResult("AccessDenied", "Account", null);
             }
         }

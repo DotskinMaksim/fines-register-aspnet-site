@@ -16,20 +16,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
-// Регистрация EmailService
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddSingleton<ISmsService, SmsService>();
-
-
+builder.Services.AddHttpClient();
 builder.Services.AddDbContextPool<FinesRegisterContext>(options => 
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// Добавляем службы контроллеров с представлениями
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Конфигурируем HTTP-конвейер
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -48,7 +44,6 @@ using (var scope = app.Services.CreateScope())
     
     context.Database.EnsureCreated();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

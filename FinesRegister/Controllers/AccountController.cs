@@ -39,15 +39,14 @@ namespace FinesRegister.Controllers
         [Authorize]
         public async Task<IActionResult> Fines()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Получаем ID текущего пользователя
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
 
-            // Фильтруем штрафы по пользователю
             var fines = await _dbContext.Fines
                 .Include(f => f.Car)
                 .Where(f => f.Car.UserId == userId)
                 .ToListAsync();
 
-            return View(fines); // Возвращаем только штрафы, относящиеся к текущему пользователю
+            return View(fines); 
         }
         
         
@@ -57,10 +56,8 @@ namespace FinesRegister.Controllers
         [HttpPost]
         public IActionResult PayFines(string fineIds)
         {
-            // Десериализация идентификаторов штрафов из JSON
             var fineIdsList = JsonConvert.DeserializeObject<List<int>>(fineIds);
 
-            // Получаем все штрафы с указанными идентификаторами
             var fines = _dbContext.Fines
                 .Where(f => fineIdsList.Contains(f.Id) && !f.IsPaid)
                 .ToList();
@@ -73,13 +70,12 @@ namespace FinesRegister.Controllers
                 TotalAmount = totalAmount,
                 PaymentMethods = _dbContext.PaymentMethods
                     .Where(p => p.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    .ToList() // Получение списка методов оплаты
+                    .ToList() 
             };
 
             return View("PayFines", model);
         }
         
-        // Завершение платежа и отметка штрафов как оплаченных
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CompletePayment(string fineIds)
@@ -146,20 +142,32 @@ namespace FinesRegister.Controllers
 
         public IActionResult Logout()
         {
-            _signInManager.SignOutAsync(); // Выход пользователя
-            return RedirectToAction("Index", "Home"); // Перенаправление на главную страницу после выхода
+            _signInManager.SignOutAsync(); 
+            return RedirectToAction("Index", "Home"); 
         }
         
-        // Метод для удаления всех пользователей с неподтвержденной почтой
         private async Task DeleteInactiveUsersAsync()
         {
             var inactiveUsers = await _dbContext.Users
                 .Where(u => !u.EmailConfirmed)
-                .ToListAsync(); // Найдите всех пользователей, которые не подтвердили почту и зарегистрировались более 24 часов назад
+                .ToListAsync();
 
             if (inactiveUsers.Any())
             {
-                _dbContext.Users.RemoveRange(inactiveUsers); // Удаляем пользователей из БД
+                var inactiveUserIds = inactiveUsers.Select(u => u.Id).ToList();
+                var carsToUpdate = await _dbContext.Cars
+                    .Where(c => inactiveUserIds.Contains(c.UserId))
+                    .ToListAsync();
+
+                foreach (var car in carsToUpdate)
+                {
+                    car.UserId = "not defined";
+                }
+
+                _dbContext.Cars.UpdateRange(carsToUpdate);
+                await _dbContext.SaveChangesAsync();
+
+                _dbContext.Users.RemoveRange(inactiveUsers);
                 await _dbContext.SaveChangesAsync();
 
                 _logger.LogInformation($"Eemaldatud {inactiveUsers.Count} passiivset kasutajat");
@@ -170,12 +178,10 @@ namespace FinesRegister.Controllers
         {
             var email = TempData["Email"]?.ToString();
             
-            // Генерация и отправка кода подтверждения
             string confirmCode = _emailService.GenerateRandomNumbers(6);
             await _emailService.SendConfirmationEmail(email,  "ConfirmationCode",
                     "Kinnitage registreerimine",confirmCode);
 
-            // Сохраняем код в TempData для проверки в подтверждении
             TempData["ConfirmCode"] = confirmCode;
 
             return RedirectToAction("ConfirmRegister");
@@ -184,12 +190,11 @@ namespace FinesRegister.Controllers
 
         
 
-        // Метод для страницы входа
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            await DeleteInactiveUsersAsync(); // Удаляем неактивированных пользователей
+            await DeleteInactiveUsersAsync(); 
 
-            ViewBag.ReturnUrl = returnUrl; // Сохраняем returnUrl в ViewBag для использования в представлении
+            ViewBag.ReturnUrl = returnUrl; 
             return View();
         }
 
@@ -200,7 +205,6 @@ namespace FinesRegister.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Попробуйте найти пользователя по email
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user == null)
@@ -216,7 +220,6 @@ namespace FinesRegister.Controllers
                     return View(model);
                 }
 
-                // Проверка блокировки пользователя
                 if (await _userManager.IsLockedOutAsync(user))
                 {
                     _logger.LogWarning("Kasutaja {Email} on lukustatud.", model.Email);
@@ -224,7 +227,6 @@ namespace FinesRegister.Controllers
                     return View(model);
                 }
 
-                // Проверка входа
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe,
                     lockoutOnFailure: false);
                 if (result.Succeeded)
@@ -262,10 +264,9 @@ namespace FinesRegister.Controllers
 
         // GET: /Account/Register
         [HttpGet]
-        // Метод для страницы регистрации
         public async Task<IActionResult> Register()
         {
-            await DeleteInactiveUsersAsync(); // Удаляем неактивированных пользователей
+            await DeleteInactiveUsersAsync(); 
 
             return View();
         }
@@ -277,7 +278,6 @@ namespace FinesRegister.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Проверка наличия пользователя с таким же email
                 var existingUser = await _userManager.FindByEmailAsync(model.Email);
                 if (existingUser != null)
                 {
@@ -295,31 +295,23 @@ namespace FinesRegister.Controllers
                     return View(model);
                 }
 
-                // Создаем нового пользователя
                 var user = new User
                 {
                     Email = model.Email,
                     UserName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber,
-                    EmailConfirmed = false // Пользователь не подтвержден
+                    EmailConfirmed = false 
                 };
 
-                // Создаем пользователя без активации
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    car.UserId = user.Id;
+                    _dbContext.Update(car); 
+                    await _dbContext.SaveChangesAsync();
                     
-                    // string confirmCode = _emailService.GenerateRandomNumbers(6);
-                    // await _emailService.SendConfirmationEmail(model.Email, confirmCode, "confirmationCode", "Kinnitage registreerimine");
-                    //
-                    // // Сохраняем код в TempData для проверки в подтверждении
-                    // TempData["UserId"] = user.Id;
-                    //
-                    // TempData["ConfirmCode"] = confirmCode;
-                    // TempData["Email"] = model.Email;
-                    //
-                    // return RedirectToAction("ConfirmRegister");
+                   
                     TempData["UserId"] = user.Id;
                     TempData["Email"] = user.Email;
                     
@@ -344,29 +336,26 @@ namespace FinesRegister.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmRegister(ConfirmCodeViewModel model)
         {
-            // Получаем код из TempData
             var userId = TempData["UserId"]?.ToString();
-
             var confirmCode = TempData["ConfirmCode"]?.ToString();
-           
+
             if (confirmCode == model.Code && !string.IsNullOrEmpty(userId))
             {
-                // Находим пользователя по ID
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user != null)
                 {
-                    // Подтверждаем email
                     user.EmailConfirmed = true;
                     await _userManager.UpdateAsync(user);
 
-                    // Автовход после подтверждения
                     await _signInManager.SignInAsync(user, isPersistent: true);
 
                     return RedirectToAction("Index", "Home");
                 }
             }
 
-            // Если код неверный, возвращаем сообщение об ошибке
+            TempData["ConfirmCode"] = confirmCode;
+            TempData["UserId"] = userId;
+
             ViewBag.ErrorMessage = "Kehtetu kinnituskood";
             return View();
         }

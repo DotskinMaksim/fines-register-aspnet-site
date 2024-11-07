@@ -53,7 +53,7 @@ public class AdminController : Controller
     {
         var _fine = await _dbContext.Fines
             .Include(f => f.Car)
-            .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
+            .ThenInclude(c => c.User) 
             .FirstOrDefaultAsync(f => f.Id == id);
 
         if (_fine.Car.User.Id == "not defined")
@@ -82,7 +82,7 @@ public class AdminController : Controller
         
         var _fine = await _dbContext.Fines
             .Include(f => f.Car)
-            .ThenInclude(c => c.User) // Загружаем пользователя, связанного с автомобилем
+            .ThenInclude(c => c.User) 
             .FirstOrDefaultAsync(f => f.Id == id);   
         
         if (_fine.Car.User.Id == "not defined")
@@ -92,15 +92,13 @@ public class AdminController : Controller
         }
         if (_fine == null)
         {
-            // Обработка случая, когда штраф не найден
             throw new Exception("Fine not found");
         }
 
-        string email = _fine.Car?.User?.Email; // Используйте оператор безопасного доступа (?.)
+        string email = _fine.Car?.User?.Email; 
 
         if (string.IsNullOrEmpty(email))
         {
-            // Обработка случая, когда адрес электронной почты не найден
             throw new Exception("Email not found for the user associated with the fine");
         }
 
@@ -113,13 +111,10 @@ public class AdminController : Controller
     
     public async Task<IActionResult> NotifyFine(int id)
     {
-        // Отправка уведомления по SMS
         await NotifyBySms(id);
     
-        // Отправка уведомления по электронной почте
         await NotifyByEmail(id);
     
-        // Перенаправление на страницу со списком штрафов
         return RedirectToAction("Fines", "Admin");
     }
 
@@ -143,7 +138,6 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        // Получаем список пользователей для выпадающего списка
         var users = _userManager.Users.Select(u => new SelectListItem
         {
             Value = u.Id,
@@ -155,7 +149,7 @@ public class AdminController : Controller
             Id = car.Id,
             Number = car.Number,
             UserId = car.UserId,
-            Users = users  // Передаем список пользователей в модель
+            Users = users 
         };
 
         return View(editModel);
@@ -175,7 +169,7 @@ public class AdminController : Controller
             }
 
             car.Number = model.Number;
-            car.UserId = model.UserId;  // Сохраняем выбранного пользователя
+            car.UserId = model.UserId; 
 
             _dbContext.Update(car);
             await _dbContext.SaveChangesAsync();
@@ -183,7 +177,6 @@ public class AdminController : Controller
             return RedirectToAction("Cars", "Admin");
         }
 
-        // В случае ошибки, снова передаем список пользователей
         model.Users = _userManager.Users.Select(u => new SelectListItem
         {
             Value = u.Id,
@@ -234,8 +227,8 @@ public class AdminController : Controller
     {
         var users = _userManager.Users.Select(u => new SelectListItem
         {
-            Value = u.Id,         // ID пользователя
-            Text = u.UserName     // Имя пользователя или другое значение, которое вы хотите отображать
+            Value = u.Id,        
+            Text = u.UserName    
         }).ToList();
 
         var model = new CarCreateViewModel
@@ -256,15 +249,14 @@ public class AdminController : Controller
             var car = new Car
             {
                 Number = model.Number,
-                UserId = model.UserId // Сохраняем выбранного пользователя
+                UserId = model.UserId 
             };
 
             _dbContext.Cars.Add(car);
             await _dbContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Cars)); // Перенаправление на список автомобилей
+            return RedirectToAction(nameof(Cars)); 
         }
 
-        // Если есть ошибка, снова заполняем пользователей
         model.Users = _userManager.Users.Select(u => new SelectListItem
         {
             Value = u.Id,
@@ -319,7 +311,6 @@ public class AdminController : Controller
    // GET: /Admin/FineCreate
    public async Task<IActionResult> FineCreate()
     {
-    // Получаем список автомобилей
     var cars = await _dbContext.Cars.Select(c => new SelectListItem
     {
         Value = c.Id.ToString(),
@@ -340,10 +331,9 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FineCreate(FineCreateViewModel model)
     {
-        // Убедимся, что дата актуальна и корректна
-        if (model.IssueDate == default) // Если дата не задана, устанавливаем её в сегодня
+        if (model.IssueDate == default) 
         {
-            model.IssueDate = DateOnly.FromDateTime(DateTime.Today); // Преобразуем DateTime в DateOnly
+            model.IssueDate = DateOnly.FromDateTime(DateTime.Today); 
         }
 
 
@@ -356,14 +346,14 @@ public class AdminController : Controller
                 if (car == null)
                 {
                     ViewBag.ErrorMessage = "Auto ei leitud";
-                    return View(model); // Возвращаем модель, чтобы сохранить введенные данные
+                    return View(model); 
                 }
                 model.CarId = car.Id;
             }
             catch (Exception e)
             {
                 ViewBag.ErrorMessage = "Auto ei leitud";
-                return View(model); // Возвращаем модель, чтобы сохранить введенные данные
+                return View(model);
             }
         }
 
@@ -374,7 +364,7 @@ public class AdminController : Controller
             CarId = model.CarId
         };
 
-        if (!string.IsNullOrEmpty(model.ViolationType)) // Проверка на пустое значение
+        if (!string.IsNullOrEmpty(model.ViolationType)) 
         {
             switch (model.ViolationType)
             {
@@ -389,12 +379,12 @@ public class AdminController : Controller
             }
         }
 
-        // Добавляем штраф в контекст и сохраняем изменения
         _dbContext.Fines.Add(fine);
         await _dbContext.SaveChangesAsync();
 
-        // Перенаправление на список штрафов
-        return RedirectToAction("NotifyFine", "Admin", new { id = fine.Id });
+        // return RedirectToAction("NotifyFine", "Admin", new { id = fine.Id });
+        return RedirectToAction("Fines", "Admin");
+
 
 
     }
